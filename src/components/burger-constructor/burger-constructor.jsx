@@ -39,8 +39,8 @@ function BurgerConstructor({data}) {
         thumbnail={data[0].image}
       />
 
-    <div className={`${construcorStyle.flex} pt-10`}>
-      <div className="pr-10">
+    <div className={`${construcorStyle.flex} ${construcorStyle.flexCheck} pt-10`}>
+      <div className={`${construcorStyle.flex} pr-10`}>
         <p className="text text_type_digits-medium text_color_primary pr-2">610</p>
         <CurrencyIcon className="pr-10" />
       </div>

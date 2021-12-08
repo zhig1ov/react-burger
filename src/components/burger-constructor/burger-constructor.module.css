@@ -19,6 +19,9 @@
 
 .flex {
   display: flex;
-  align-self: flex-end;
+  align-items: center;
 }
 
+.flexCheck {
+  align-self: flex-end;
+}
