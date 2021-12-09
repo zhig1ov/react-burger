@@ -6,11 +6,12 @@ import IngredientsStyle from './burger-ingredients.module.css'
 
 
 
-function BurgerIngredients({data}) {
+function BurgerIngredients({ ingredients }) {
+
   const [current, setCurrent] = React.useState('buns')
-  const buns = data.filter((ingredient) => ingredient.type === 'bun')
-  const mains = data.filter((ingredient) => ingredient.type === 'main')
-  const sauces = data.filter((ingredient) => ingredient.type === 'sauce')
+  const buns = ingredients.filter((ingredient) => ingredient.type === 'bun')
+  const mains = ingredients.filter((ingredient) => ingredient.type === 'main')
+  const sauces = ingredients.filter((ingredient) => ingredient.type === 'sauce')
 
   return(
     <section className={`${IngredientsStyle.container} pt-10 pr-10`}>
@@ -57,7 +58,7 @@ function BurgerIngredients({data}) {
 }
 
 BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
+  ingredients: PropTypes.arrayOf(PropTypes.shape({
         _id: PropTypes.string.isRequired
   }).isRequired).isRequired
 }
