@@ -5,7 +5,8 @@ import PropTypes from 'prop-types'
 import orderDetailsStyle from './order-details.module.css'
 
 const OrderDetails = ({ handleClose }) => {
-  <Modal handleClose={handleClose}>
+  return (
+    <Modal handleClose={handleClose}>
     <div className={`pt-8 pb-30 ${orderDetailsStyle.container}`}>
       <p className={`pt-9 pb-8 text text_type_digits-large`}>034536</p>
       <p className="text text_type_main-medium">идентификатор заказа</p>
@@ -14,6 +15,7 @@ const OrderDetails = ({ handleClose }) => {
       <p className="text text_type_main-default text_color_inactive">Дождитесь готовности на орбитальной станции</p>
     </div>
   </Modal>
+  )
 }
 
 OrderDetails.propTypes = {

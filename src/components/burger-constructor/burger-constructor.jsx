@@ -2,10 +2,20 @@ import React, { useState } from 'react'
 import { Button, CurrencyIcon, ConstructorElement} from '@ya.praktikum/react-developer-burger-ui-components'
 import PropTypes from 'prop-types'
 import construcorStyle from './burger-constructor.module.css'
+import OrderDetails from '../order-details/order-details'
 
 function BurgerConstructor({ ingredients }) {
+  const [ modal, setModal ] = useState(false)
   const mainIngredients = ingredients.filter((item) => item.type !== "bun")
   const buns = ingredients.find(bun => bun.type === 'bun')
+
+  const handleClose = () => {
+    setModal(false)
+  }
+
+  const handleOpen = () => {
+    setModal(true)
+  }
 
   return (
     <section className={`${construcorStyle.container} pt-25`}>
@@ -46,10 +56,13 @@ function BurgerConstructor({ ingredients }) {
         <p className="text text_type_digits-medium text_color_primary pr-2">610</p>
         <CurrencyIcon className="pr-10" />
       </div>
-      <Button type="primary" size="medium">
+      <Button type="primary" size="medium" onClick={handleOpen}>
         Оформить заказ
       </Button>
     </div>
+    {modal && 
+    <OrderDetails handleClose={handleClose}></OrderDetails>
+    }
     </section>
   )
 }

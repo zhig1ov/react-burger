@@ -1,4 +1,4 @@
-import React from 'react' 
+import React, { useState, useRef, useEffect } from 'react' 
 import IngredientsItem from '../ingredients-item/ingredients-item'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import PropTypes from 'prop-types'
@@ -8,7 +8,22 @@ import IngredientsStyle from './burger-ingredients.module.css'
 
 function BurgerIngredients({ ingredients }) {
 
-  const [current, setCurrent] = React.useState('buns')
+  const [current, setCurrent] = useState('buns')
+
+  const bunTab = useRef();
+  const sauceTab = useRef();
+  const mainTab = useRef();
+
+  useEffect(() => {
+    if (current === "buns") {
+      bunTab.current.scrollIntoView({behavior: 'smooth'})
+    } else if (current === "sauces") {
+      sauceTab.current.scrollIntoView({behavior: 'smooth'})
+    } else if (current === "main") {
+      mainTab.current.scrollIntoView({behavior: 'smooth'})
+    }
+  }, [current])
+
   const buns = ingredients.filter((ingredient) => ingredient.type === 'bun')
   const mains = ingredients.filter((ingredient) => ingredient.type === 'main')
   const sauces = ingredients.filter((ingredient) => ingredient.type === 'sauce')
@@ -27,8 +42,8 @@ function BurgerIngredients({ ingredients }) {
           Начинки
         </Tab>
       </div>
-      <div className={`${IngredientsStyle.type} custom-scroll mt-10 pr-1`}>
-        <div >
+      <div  className={`${IngredientsStyle.type} custom-scroll mt-10 pr-1`}>
+        <div ref={bunTab}>
           <h3 className="text text_type_main-medium pb-6">Булки</h3>
           <div className={IngredientsStyle.grid}>
             {buns.map((item) => (
@@ -36,7 +51,7 @@ function BurgerIngredients({ ingredients }) {
             ))}
           </div>
         </div>
-        <div >
+        <div ref={sauceTab}>
           <h3 className="text text_type_main-medium pb-6">Соусы</h3>
           <div className={IngredientsStyle.grid}>
             {sauces.map((item) => (
@@ -44,7 +59,7 @@ function BurgerIngredients({ ingredients }) {
             ))}
           </div>
         </div>
-        <div >
+        <div ref={mainTab}>
           <h3 className="text text_type_main-medium pb-6">Начинки</h3>
           <div className={IngredientsStyle.grid}>
             {mains.map((item) => (
