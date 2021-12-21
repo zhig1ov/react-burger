@@ -5,7 +5,7 @@ import BurgerConstructor from '../burger-constructor/burger-constructor'
 import { IngredientsContext } from '../../services/constructorContext';
 import appStyle from './app.module.css';
 
-const apiIngredients = "https://norma.nomoreparties.space/api/ingredients";
+const apiLink = "https://norma.nomoreparties.space/api";
 
 function App() {
   const [ ingredients, setIngredients ] = useState([])
@@ -13,7 +13,7 @@ function App() {
   useEffect(() => {
     const getIngredients = async () => {
       try {
-        const res = await fetch(apiIngredients);
+        const res = await fetch(`${apiLink}/ingredients`);
         if (!res.ok) {
           throw new Error('Response error')
         }
@@ -40,4 +40,4 @@ function App() {
   );
 }
 
-export default App;
+export { App, apiLink}

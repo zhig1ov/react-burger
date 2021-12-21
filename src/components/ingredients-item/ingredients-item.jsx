@@ -3,7 +3,7 @@ import IngredientsItemStyle from './ingredients-item.module.css'
 import IngredientDeatils from '../ingredient-details/ingredient-details'
 import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components"
 import Modal from '../modal/modal'
-import PropTypes from 'prop-types'
+import ingredientsShape from '../../utils/types'
 
 
 const IngredientsItem = ({ ingredient }) => {
@@ -38,11 +38,7 @@ const IngredientsItem = ({ ingredient }) => {
 }
 
 IngredientsItem.propTypes = {
-  ingredient: PropTypes.shape({
-        image: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired
-  }).isRequired
+  ingredient: ingredientsShape.isRequired
 }
 
 export default IngredientsItem

@@ -3,13 +3,15 @@ import { Button, CurrencyIcon, ConstructorElement} from '@ya.praktikum/react-dev
 import construcorStyle from './burger-constructor.module.css'
 import OrderDetails from '../order-details/order-details'
 import { IngredientsContext } from '../../services/constructorContext'
+import { apiLink } from '../app/app'
 import Modal from '../modal/modal'
 
 function BurgerConstructor() {
   const { ingredients } = useContext(IngredientsContext)
   const [ orderNum, setOrderNum ] = useState(null)
 
-  const mainIngredients = ingredients.filter((item) => item.type !== "bun")
+  const mainIngredients = useMemo(() => ingredients.filter((item) => item.type !== "bun"), [ingredients])
+
   const bun = ingredients.find(bun => bun.type === 'bun')
 
   const totalPrice = useMemo(() => 
@@ -23,23 +25,27 @@ function BurgerConstructor() {
   })
 
   const makeOrder = async (ingredientsId) => {
-    const res = await fetch('https://norma.nomoreparties.space/api/orders', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        ingredients: ingredientsId
+    try {
+      const res = await fetch(`${apiLink}/orders`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ingredients: ingredientsId
+        })
       })
-    })
-
-    if (!res.ok) {
-      throw new Error ('Response error')
-    } 
-    const data = await res.json()
-    console.log(data)
-    setOrderNum(data.order.number)
+  
+      if (!res.ok) {
+        throw new Error ('Response error')
+      } 
+      const data = await res.json()
+      setOrderNum(data.order.number)
+    }
+    catch (err) {
+      console.log(err.message)
+    }
   }
 
   const handleClose = () => {
@@ -54,7 +60,6 @@ function BurgerConstructor() {
     <section className={`${construcorStyle.container} pt-25`}>
       {bun && 
       <ConstructorElement 
-        key={"top"}
         type={"top"}
         isLocked={true}
         text={`${bun.name} ${'(верх)'}`}
@@ -76,7 +81,6 @@ function BurgerConstructor() {
       </ul>
       {bun && 
       <ConstructorElement
-        key={"bottom"}
         type={"bottom"}
         isLocked={true}
         text={`${bun.name} ${'(низ)'}`}

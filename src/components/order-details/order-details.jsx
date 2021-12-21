@@ -16,7 +16,7 @@ const OrderDetails = ({ orderNum }) => {
 }
 
 OrderDetails.propTypes = {
-  orderNum: PropTypes.func.isRequired
+  orderNum: PropTypes.number.isRequired
 }
 
 export default OrderDetails

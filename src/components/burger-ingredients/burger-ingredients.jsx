@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from 'react' 
+import React, { useState, useRef, useEffect, useContext, useMemo } from 'react' 
 import IngredientsItem from '../ingredients-item/ingredients-item'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import IngredientsStyle from './burger-ingredients.module.css'
@@ -22,7 +22,8 @@ function BurgerIngredients() {
     }
   }, [current])
 
-  const buns = ingredients.filter((ingredient) => ingredient.type === 'bun')
+  const buns = useMemo(() => ingredients.filter((ingredient) => ingredient.type === 'bun'), [ingredients])
+
   const mains = ingredients.filter((ingredient) => ingredient.type === 'main')
   const sauces = ingredients.filter((ingredient) => ingredient.type === 'sauce')
 
