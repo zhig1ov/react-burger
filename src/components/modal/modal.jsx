@@ -9,23 +9,29 @@ const Modal = ({ children, handleClose}) => {
 
   const modalRoot = document.getElementById('modal-root')
 
-  const closeEsc = (e) => {
-    if(e.key === 'Escape') {
-      handleClose()
-    }
-  }
+  // const closeEsc = useCallback((e) => {
+  //   if(e.keyCode === 27) {
+  //     handleClose(e)
+  //   }
+  // }, [handleClose]) 
+
 
   const stopPropagation = (e) => {
     e.stopPropagation()
   }
 
   useEffect(() => {
-    document.addEventListener('keyup', closeEsc)
+    const closeEsc = (e) => {
+      if(e.keyCode === 27) {
+        handleClose(e)
+      }
+    }
+    document.addEventListener('keydown', closeEsc)
 
-    return (
-      document.removeEventListener('keyup', closeEsc)
+    return () => (
+      document.removeEventListener('keydown', closeEsc)
     )
-  }, [])
+  }, [handleClose])
 
   return ReactDOM.createPortal(
     (

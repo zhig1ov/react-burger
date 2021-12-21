@@ -1,13 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Button, CurrencyIcon, ConstructorElement} from '@ya.praktikum/react-developer-burger-ui-components'
 import PropTypes from 'prop-types'
 import construcorStyle from './burger-constructor.module.css'
 import OrderDetails from '../order-details/order-details'
+import { IngredientsContext, TotalPriceContext } from '../../services/constructorContext'
 
-function BurgerConstructor({ ingredients }) {
+function BurgerConstructor() {
+  const { ingredients } = useContext(IngredientsContext)
+  const { totalPrice, setTotalPrice } = useContext(TotalPriceContext)
   const [ modal, setModal ] = useState(false)
   const mainIngredients = ingredients.filter((item) => item.type !== "bun")
   const buns = ingredients.find(bun => bun.type === 'bun')
+  console.log()
+
+  useEffect(() => { 
+    let total = 0
+    ingredients.map(item =>(total += item.price))
+
+    setTotalPrice(total)
+  }, [ingredients, setTotalPrice])
 
   const handleClose = () => {
     setModal(false)
@@ -53,7 +64,7 @@ function BurgerConstructor({ ingredients }) {
 
     <div className={`${construcorStyle.flex} ${construcorStyle.flexCheck} pt-10`}>
       <div className={`${construcorStyle.flex} pr-10`}>
-        <p className="text text_type_digits-medium text_color_primary pr-2">610</p>
+        <p className="text text_type_digits-medium text_color_primary pr-2">{totalPrice}</p>
         <CurrencyIcon className="pr-10" />
       </div>
       <Button type="primary" size="medium" onClick={handleOpen}>
