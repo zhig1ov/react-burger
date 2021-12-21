@@ -9,13 +9,6 @@ const Modal = ({ children, handleClose}) => {
 
   const modalRoot = document.getElementById('modal-root')
 
-  // const closeEsc = useCallback((e) => {
-  //   if(e.keyCode === 27) {
-  //     handleClose(e)
-  //   }
-  // }, [handleClose]) 
-
-
   const stopPropagation = (e) => {
     e.stopPropagation()
   }

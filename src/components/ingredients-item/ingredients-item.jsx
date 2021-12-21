@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import IngredientsItemStyle from './ingredients-item.module.css'
 import IngredientDeatils from '../ingredient-details/ingredient-details'
 import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components"
+import Modal from '../modal/modal'
 import PropTypes from 'prop-types'
 
 
@@ -28,7 +29,9 @@ const IngredientsItem = ({ ingredient }) => {
       <p className="text text_type_main-default text_color_primary">{ingredient.name}</p>
     </article>
       {modal &&
-        <IngredientDeatils ingredients={ingredient} handleClose={handleClose}></IngredientDeatils>
+        <Modal handleClose={handleClose}>
+          <IngredientDeatils ingredients={ingredient} handleClose={handleClose}></IngredientDeatils>
+        </Modal>
       }
     </>
   )

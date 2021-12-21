@@ -1,43 +1,65 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useMemo } from 'react'
 import { Button, CurrencyIcon, ConstructorElement} from '@ya.praktikum/react-developer-burger-ui-components'
-import PropTypes from 'prop-types'
 import construcorStyle from './burger-constructor.module.css'
 import OrderDetails from '../order-details/order-details'
-import { IngredientsContext, TotalPriceContext } from '../../services/constructorContext'
+import { IngredientsContext } from '../../services/constructorContext'
+import Modal from '../modal/modal'
 
 function BurgerConstructor() {
   const { ingredients } = useContext(IngredientsContext)
-  const { totalPrice, setTotalPrice } = useContext(TotalPriceContext)
-  const [ modal, setModal ] = useState(false)
+  const [ orderNum, setOrderNum ] = useState(null)
+
   const mainIngredients = ingredients.filter((item) => item.type !== "bun")
-  const buns = ingredients.find(bun => bun.type === 'bun')
-  console.log()
+  const bun = ingredients.find(bun => bun.type === 'bun')
 
-  useEffect(() => { 
-    let total = 0
-    ingredients.map(item =>(total += item.price))
+  const totalPrice = useMemo(() => 
+  ingredients.reduce((sum, ingredient) => sum + ingredient.price, 0)
+  , [ingredients])
 
-    setTotalPrice(total)
-  }, [ingredients, setTotalPrice])
+  const ingredientsId = []
+
+  ingredients.forEach(el => {
+    ingredientsId.push(el._id)
+  })
+
+  const makeOrder = async (ingredientsId) => {
+    const res = await fetch('https://norma.nomoreparties.space/api/orders', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ingredients: ingredientsId
+      })
+    })
+
+    if (!res.ok) {
+      throw new Error ('Response error')
+    } 
+    const data = await res.json()
+    console.log(data)
+    setOrderNum(data.order.number)
+  }
 
   const handleClose = () => {
-    setModal(false)
+    setOrderNum(null)
   }
 
   const handleOpen = () => {
-    setModal(true)
+    makeOrder(ingredientsId)
   }
 
   return (
     <section className={`${construcorStyle.container} pt-25`}>
-      {buns && 
+      {bun && 
       <ConstructorElement 
         key={"top"}
         type={"top"}
         isLocked={true}
-        text={`${buns.name} ${'(верх)'}`}
-        price={buns.price}
-        thumbnail={buns.image}
+        text={`${bun.name} ${'(верх)'}`}
+        price={bun.price}
+        thumbnail={bun.image}
       />}
       <ul className={`${construcorStyle.list} custom-scroll pr-1 pl-2 mt-4 mb-4 `}>
         {mainIngredients.map((item) => (
@@ -52,38 +74,33 @@ function BurgerConstructor() {
           </li>
         ))}
       </ul>
-      {buns && 
+      {bun && 
       <ConstructorElement
         key={"bottom"}
         type={"bottom"}
         isLocked={true}
-        text={`${buns.name} ${'(низ)'}`}
-        price={buns.price}
-        thumbnail={buns.image}
+        text={`${bun.name} ${'(низ)'}`}
+        price={bun.price}
+        thumbnail={bun.image}
       />}
 
     <div className={`${construcorStyle.flex} ${construcorStyle.flexCheck} pt-10`}>
       <div className={`${construcorStyle.flex} pr-10`}>
-        <p className="text text_type_digits-medium text_color_primary pr-2">{totalPrice}</p>
+        <p className="text text_type_digits-medium text_color_primary pr-2"> {totalPrice} </p>
         <CurrencyIcon className="pr-10" />
       </div>
       <Button type="primary" size="medium" onClick={handleOpen}>
         Оформить заказ
       </Button>
     </div>
-    {modal && 
-    <OrderDetails handleClose={handleClose}></OrderDetails>
+    {orderNum && (
+      <Modal handleClose={handleClose}>
+        <OrderDetails orderNum={orderNum}></OrderDetails>
+      </Modal>
+    )
     }
     </section>
   )
 }
 
-BurgerConstructor.propTypes = {
-  ingredients: PropTypes.arrayOf(PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        image: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired
-  }).isRequired).isRequired
-}
 export default BurgerConstructor
