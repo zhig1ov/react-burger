@@ -4,8 +4,8 @@ import BurgerIngredients from '../burger-ingredients/burger-ingredients'
 import BurgerConstructor from '../burger-constructor/burger-constructor'
 import { IngredientsContext } from '../../services/constructorContext';
 import appStyle from './app.module.css';
+import apiLink from '../../utils/constants';
 
-const apiLink = "https://norma.nomoreparties.space/api";
 
 function App() {
   const [ ingredients, setIngredients ] = useState([])

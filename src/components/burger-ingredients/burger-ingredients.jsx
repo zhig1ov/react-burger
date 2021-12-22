@@ -22,10 +22,14 @@ function BurgerIngredients() {
     }
   }, [current])
 
-  const buns = useMemo(() => ingredients.filter((ingredient) => ingredient.type === 'bun'), [ingredients])
+  const buns = useMemo(() =>
+   ingredients.filter((ingredient) => ingredient.type === 'bun'), [ingredients])
 
-  const mains = ingredients.filter((ingredient) => ingredient.type === 'main')
-  const sauces = ingredients.filter((ingredient) => ingredient.type === 'sauce')
+  const mains = useMemo(() =>
+   ingredients.filter((ingredient) => ingredient.type === 'main'), [ingredients])
+   
+  const sauces = useMemo(() =>
+   ingredients.filter((ingredient) => ingredient.type === 'bun'), [ingredients])
 
   return(
     <section className={`${IngredientsStyle.container} pt-10 pr-10`}>
