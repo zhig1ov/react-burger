@@ -4,10 +4,16 @@ import IngredientDeatils from '../ingredient-details/ingredient-details'
 import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components"
 import Modal from '../modal/modal'
 import ingredientsShape from '../../utils/types'
+import { useDrag } from 'react-dnd'
 
 
 const IngredientsItem = ({ ingredient }) => {
   const [ modal, setModal ] = useState(false)
+
+  const [, dragRef] = useDrag({
+    type: 'ingredient',
+    item: { ingredient }
+  })
 
   const handleClose = () => {
     setModal(false)
@@ -19,7 +25,7 @@ const IngredientsItem = ({ ingredient }) => {
 
   return (
     <>
-    <article onClick={handleOpen} className={IngredientsItemStyle.container}>
+    <article onClick={handleOpen} className={IngredientsItemStyle.container} ref={dragRef}>
       <Counter count={1} size="default" />
       <img src={ingredient.image} alt={ingredient.name} />
       <div className={`${IngredientsItemStyle.flex} pb-1 pt-1`} >

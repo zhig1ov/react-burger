@@ -3,14 +3,20 @@ import IngredientsItem from '../ingredients-item/ingredients-item'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import IngredientsStyle from './burger-ingredients.module.css'
 import { IngredientsContext } from '../../services/constructorContext'
+import { useSelector } from 'react-redux'
+
 
 function BurgerIngredients() {
   const { ingredients } = useContext(IngredientsContext)
+
   const [current, setCurrent] = useState('buns')
 
+
+  
   const bunTab = useRef();
   const sauceTab = useRef();
   const mainTab = useRef();
+
 
   useEffect(() => {
     if (current === "buns") {

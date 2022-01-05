@@ -5,12 +5,16 @@ import BurgerConstructor from '../burger-constructor/burger-constructor'
 import { IngredientsContext } from '../../services/constructorContext';
 import appStyle from './app.module.css';
 import apiLink from '../../utils/constants';
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { useSelector } from 'react-redux'
 
 
 function App() {
   const [ ingredients, setIngredients ] = useState([])
 
   useEffect(() => {
+    
     const getIngredients = async () => {
       try {
         const res = await fetch(`${apiLink}/ingredients`);
@@ -32,8 +36,10 @@ function App() {
       <AppHeader />
       <main className={appStyle.main} >
       <IngredientsContext.Provider value={{ ingredients, setIngredients }}>
-        <BurgerIngredients />
-        <BurgerConstructor  />
+        <DndProvider backend={HTML5Backend}>
+          <BurgerIngredients />
+          <BurgerConstructor  />
+        </DndProvider>
       </IngredientsContext.Provider>
       </main>
     </div>
@@ -41,3 +47,5 @@ function App() {
 }
 
 export { App, apiLink}
+
+
