@@ -28,7 +28,7 @@ const IngredientsItem = ({ ingredient, handleClick }) => {
   return (
     <article onClick={() => handleClick(ingredient)} className={IngredientsItemStyle.container} ref={dragRef}>
       {count > 0 && 
-        <Counter count={1} size="default" />}
+        <Counter count={count} size="default" />}
       <img src={ingredient.image} alt={ingredient.name} />
       <div className={`${IngredientsItemStyle.flex} pb-1 pt-1`} >
         <span style={{textAlign: "center"}} className="text text_type_digits-default">{ingredient.price}</span>

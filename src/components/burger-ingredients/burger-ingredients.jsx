@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from 'react' 
+import React, { useState, useRef, useMemo, useEffect } from 'react' 
 import IngredientsItem from '../ingredients-item/ingredients-item'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import IngredientsStyle from './burger-ingredients.module.css'
@@ -18,15 +18,15 @@ function BurgerIngredients() {
   const sauceTab = useRef();
   const mainTab = useRef();
 
-  // useEffect(() => {
-  //   if (current === "buns") {
-  //     bunTab.current.scrollIntoView({behavior: 'smooth'})
-  //   } else if (current === "sauces") {
-  //     sauceTab.current.scrollIntoView({behavior: 'smooth'})
-  //   } else if (current === "main") {
-  //     mainTab.current.scrollIntoView({behavior: 'smooth'})
-  //   }
-  // }, [current])
+  useEffect(() => {
+    if (current === "buns") {
+      bunTab.current.scrollIntoView({behavior: 'smooth'})
+    } else if (current === "sauces") {
+      sauceTab.current.scrollIntoView({behavior: 'smooth'})
+    } else if (current === "main") {
+      mainTab.current.scrollIntoView({behavior: 'smooth'})
+    }
+  }, [current])
   
 
   const buns = useMemo(() =>
@@ -74,13 +74,13 @@ function BurgerIngredients() {
       <section className={`${IngredientsStyle.container} pt-10 pr-10`}>
         <h1 className="text text_type_main-large pb-5">Соберите бургер</h1>
         <div className={IngredientsStyle.flex}>
-          <Tab value="buns" active={current === 'buns'} >
+          <Tab value="buns" active={current === 'buns'} onClick={setCurrent} >
             Булки
           </Tab>
-          <Tab value="sauces" active={current === 'sauces'} >
+          <Tab value="sauces" active={current === 'sauces'} onClick={setCurrent} >
             Соусы
           </Tab>
-          <Tab value="main" active={current === 'main'} >
+          <Tab value="main" active={current === 'main'} onClick={setCurrent} >
             Начинки
           </Tab>
         </div>

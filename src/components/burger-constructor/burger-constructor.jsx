@@ -87,7 +87,7 @@ const BurgerConstructor = () => {
   const dispatch = useDispatch()
   const constructorElements = useSelector(state => state.burger.constructorElements)
 
-  const orderNum = useSelector(state => state.burger.orderNumber)
+  const orderNumber = useSelector(state => state.burger.orderNumber)
 
   const bun = useSelector(state => state.burger.bun)
 
@@ -201,7 +201,7 @@ const BurgerConstructor = () => {
   </div>
 }
 
-    {orderNum && 
+    {orderNumber && 
       <Modal handleClose={handleClose}>
         <OrderDetails></OrderDetails>
       </Modal>

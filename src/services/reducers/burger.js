@@ -109,7 +109,7 @@ export const burgerReducer = (state = initialState, action) => {
     case CLEAR_ORDER_MODAL: {
       return {
         ...state,
-        orderNumbe: null
+        orderNumber: null
       }
     }
     case SORT_CONSTRUCTOR_INGREDIENTS: {

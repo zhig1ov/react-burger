@@ -46,7 +46,7 @@ export function makeOrder(ingredientsId) {
         dispatch({
           type: MAKE_ORDER_SUCCESS,
           currentOrder: res.name,
-          orderNum: res.order.number
+          orderNumber: res.order.number
         })
       } else {
         dispatch({
