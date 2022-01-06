@@ -6,7 +6,7 @@ import orderDetailsStyle from './order-details.module.css'
 
 const OrderDetails = () => {
   const orderNum = useSelector(store => store.burger.orderNumber)
-  console.log(orderNum)
+
   return (
     <div className={`pt-8 pb-30 ${orderDetailsStyle.container}`}>
       <p className={`pt-9 pb-8 text text_type_digits-large`}>{orderNum}</p>

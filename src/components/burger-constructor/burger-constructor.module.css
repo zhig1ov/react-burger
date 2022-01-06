@@ -1,6 +1,7 @@
 
 .container {
   max-width: 600px;
+  width: 100%;
   max-height: 912px;
   display: flex;
   flex-direction: column;
@@ -15,6 +16,7 @@
   flex-direction: column;
   list-style-image: url('../images/constructor-points.svg');
   gap: 16px;
+  align-self: flex-end;
 }
 
 .flex {

@@ -44,7 +44,7 @@ export function makeOrder(ingredientsId) {
     makeData(ingredientsId).then(res => {
       if (res && res.success) {
         dispatch({
-          type: GET_INGREDIENTS_SUCCESS,
+          type: MAKE_ORDER_SUCCESS,
           currentOrder: res.name,
           orderNum: res.order.number
         })
@@ -57,7 +57,7 @@ export function makeOrder(ingredientsId) {
   }
 }
 
-const makeData = async(ingredientsId) => {
+export const makeData = async(ingredientsId) => {
   return await fetch(`${apiLink}/orders`, {
     method: 'POST',
     mode: 'cors',
@@ -68,15 +68,18 @@ const makeData = async(ingredientsId) => {
       ingredients: ingredientsId
     })
   }).then(_checkResponse)
+  
+  
 }
 
 const downloadData = async () => {
   return await fetch(`${apiLink}/ingredients`).then(_checkResponse)
 }
 
-const _checkResponse = (res) => {
+function _checkResponse (res) {
   if (res.ok) {
-    return res.json()
+   return res.json()
   }
+
   return Promise.reject(`Ошибка ${res.status}`)
 }
