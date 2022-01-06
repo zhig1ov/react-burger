@@ -4,16 +4,14 @@ import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-c
 import ingredientsShape from '../../utils/types'
 import { useDrag } from 'react-dnd'
 import { useSelector } from 'react-redux'
-
+import PropTypes from 'prop-types'
 
 const IngredientsItem = ({ ingredient, handleClick }) => {
   const constructorElements = useSelector(state => state.burger.constructorElements)
   const bun = useSelector(state => state.burger.bun)
 
-
- 
   const count = useMemo(() => {
-    if(ingredient.type !== 'bun') {
+    if (ingredient.type !== 'bun') {
       return constructorElements.reduce((acc, item) => item._id === ingredient._id ? acc + 1 : acc, 0)
     } else if (bun && bun._id === ingredient._id) {
       return 1
@@ -40,7 +38,8 @@ const IngredientsItem = ({ ingredient, handleClick }) => {
 }
 
 IngredientsItem.propTypes = {
-  ingredient: ingredientsShape.isRequired
+  ingredient: ingredientsShape.isRequired,
+  handleClick: PropTypes.func.isRequired
 }
 
 export default IngredientsItem

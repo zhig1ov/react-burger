@@ -9,9 +9,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useDispatch, useSelector } from 'react-redux';
 import { getIngredients } from '../../services/actions/index'
 
-
-
-function App() {
+const App = () => {
   const dispatch = useDispatch()
   const ingredients = useSelector(state => state.burger.ingredients)
 
@@ -23,18 +21,17 @@ function App() {
     <div className={appStyle.app}>
       <AppHeader />
       <main className={appStyle.main} >
-        {ingredients && (
+        {ingredients && 
           <DndProvider backend={HTML5Backend}>
             <BurgerIngredients />
             <BurgerConstructor  />
           </DndProvider>
-        )
       }
       </main>
     </div>
   );
 }
 
-export { App, apiLink}
+export { App, apiLink }
 
 

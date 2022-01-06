@@ -1,7 +1,5 @@
 import React from 'react'
-
 import { useSelector } from 'react-redux'
-
 import orderDetailsStyle from './order-details.module.css'
 
 const OrderDetails = () => {

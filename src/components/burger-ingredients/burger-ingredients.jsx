@@ -8,7 +8,7 @@ import Modal from '../modal/modal'
 import IngredientDeatils from '../ingredient-details/ingredient-details'
 
 
-function BurgerIngredients() {
+const BurgerIngredients = () => {
   const ingredients = useSelector(state => state.burger.ingredients)
   const dispatch = useDispatch()
 
@@ -114,7 +114,8 @@ function BurgerIngredients() {
       {currentModalIngredient && 
         <Modal handleClose={handleClose}>
           <IngredientDeatils></IngredientDeatils>
-        </Modal>}
+        </Modal>
+      }
     </>
   )
 }

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import modalStyles from './modal.module.css'
 
 const Modal = ({ children, handleClose}) => {
-
+  
   const modalRoot = document.getElementById('modal-root')
 
   const stopPropagation = (e) => {

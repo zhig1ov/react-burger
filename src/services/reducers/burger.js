@@ -15,7 +15,6 @@ import {
   CLEAR_CONSTRUCTOR_INGREDIENTS
 } from "../actions/index";
 
-
 const initialState = {
   constructorElements: [],
   bun: null,
