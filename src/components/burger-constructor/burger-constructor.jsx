@@ -5,11 +5,11 @@ import OrderDetails from '../order-details/order-details'
 import Modal from '../modal/modal'
 import { useDrop } from 'react-dnd'
 import { useDispatch, useSelector } from 'react-redux'
-import { ADD_BUN, ADD_INGREDIENT, CLEAR_CONSTRUCTOR_INGREDIENTS, CLEAR_ORDER_MODAL, SORT_CONSTRUCTOR_INGREDIENTS, makeOrder } from '../../services/actions'
+import { ADD_BUN, ADD_INGREDIENT, CLEAR_CONSTRUCTOR_INGREDIENTS, CLEAR_ORDER_MODAL, SORT_CONSTRUCTOR_INGREDIENTS } from '../../services/actions/index'
 import update from 'immutability-helper'
 import { v4 as uuidv4 } from 'uuid'
 import BurgerConstructorElement from '../burgerConstructorElement/burger-constructor-element'
-
+import { makeOrder } from '../../services/actions/order'
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch()
