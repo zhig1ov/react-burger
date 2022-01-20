@@ -9,15 +9,25 @@ import {
   REMOVE_CURRENT_INGREDIENT,
   CLEAR_ORDER_MODAL,
   SORT_CONSTRUCTOR_INGREDIENTS,
-  CLEAR_CONSTRUCTOR_INGREDIENTS
+  CLEAR_CONSTRUCTOR_INGREDIENTS,
+  TIngredientsActions
 } from "../actions/index";
 
-import {   
-  MAKE_ORDER_REQUEST,
-  MAKE_ORDER_SUCCESS,
-  MAKE_ORDER_FAILED } from '../actions/order'
+import { TIngredients } from '../../utils/types'
 
-const initialState = {
+type TIngredientsState = {
+  constructorElements: TIngredients[],
+  bun: TIngredients | null,
+
+  ingredients: TIngredients[],
+  ingredientsRequest: boolean,
+  ingredientsFailed: boolean,
+
+  currentIngredient: TIngredients | null
+  orderNumber: number | null
+}
+
+const initialState: TIngredientsState = {
   constructorElements: [],
   bun: null,
 
@@ -26,19 +36,16 @@ const initialState = {
   ingredientsFailed: false,
 
   currentIngredient: null,
-
-  makeOrderRequest: false,
-  makeOrderFailed: false,
-  currentOrder: null,
   orderNumber: null
 }
 
-export const burgerReducer = (state = initialState, action) => {
+export const burgerReducer = (state = initialState, action: TIngredientsActions): TIngredientsState => {
   switch(action.type) {
     case ADD_INGREDIENT: {
       return {
         ...state,
         constructorElements: [...state.constructorElements, action.item]
+
       }
     }
     case REMOVE_INGREDIENT: {
@@ -83,28 +90,6 @@ export const burgerReducer = (state = initialState, action) => {
       return {
         ...state,
         currentIngredient: null
-      }
-    }
-    case MAKE_ORDER_REQUEST: {
-      return {
-        ...state,
-        makeOrderRequest: true
-      }
-    }
-    case MAKE_ORDER_SUCCESS: {
-      return {
-        ...state,
-        makeOrderRequest: false,
-        makeOrderFailed: false,
-        currentOrder: action.currentOrder,
-        orderNumber: action.orderNumber
-      }
-    }
-    case MAKE_ORDER_FAILED: {
-      return {
-        ...state,
-        makeOrderRequest: false,
-        makeOrderFailed: true
       }
     }
     case CLEAR_ORDER_MODAL: {

@@ -1,9 +1,11 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelectorHook } from "../../services/hooks/hooks";
 import orderDetailsStyle from './order-details.module.css'
 
-const OrderDetails = () => {
-  const orderNumber = useSelector(store => store.burger.orderNumber)
+const OrderDetails: React.FC = () => {
+  const orderNumber = useSelectorHook(
+    (state) => state.burger.orderNumber
+  );
 
   return (
     <div className={`pt-8 pb-30 ${orderDetailsStyle.container}`}>

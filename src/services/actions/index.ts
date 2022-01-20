@@ -2,6 +2,10 @@ import apiLink from '../../utils/constants'
 import { AppDispatch, AppThunk } from "../../index"
 import { TIngredients } from '../../utils/types'
 
+import { IMakeOrderAction, IMakeOrderSuccessAction
+  , IMakeOrderFailedAction
+ } from './order'
+
 
 export const ADD_INGREDIENT: 'ADD_INGREDIENT' = 'ADD_INGREDIENT'
 export const REMOVE_INGREDIENT: 'REMOVE_INGREDIENT' = 'REMOVE_INGREDIENT'
@@ -17,7 +21,7 @@ export const CLEAR_ORDER_MODAL: 'CLEAR_ORDER_MODAL' = 'CLEAR_ORDER_MODAL'
 
 export interface IAddIngredient {
   readonly type: typeof ADD_INGREDIENT
-  readonly id: string
+  readonly item: TIngredients
 }
 
 export interface IRemoveIngredient {
@@ -27,7 +31,7 @@ export interface IRemoveIngredient {
 
 export interface IAddBun {
   readonly type: typeof ADD_BUN
-  readonly id: string
+  readonly item: TIngredients | null
 }
 
 export interface IGetIngredientsAction {
@@ -45,6 +49,7 @@ export interface IGetIngredientsFailedAction {
 //
 export interface IAddCurrentIngredient {
   readonly type: typeof ADD_CURRENT_INGREDIENT,
+  item: TIngredients | null
 }
 
 export interface IRemoveCurrentIngredient {
@@ -53,6 +58,7 @@ export interface IRemoveCurrentIngredient {
 
 export interface ISortConstructorIngredients {
   readonly type: typeof SORT_CONSTRUCTOR_INGREDIENTS,
+  sortedIngredients: TIngredients[]
 }
 
 export interface IClearConstructorIngredients {
@@ -63,9 +69,9 @@ export interface IClearOrderModal {
   readonly type: typeof CLEAR_ORDER_MODAL,
 }
 
-export const AddIngredient = (id: string): IAddIngredient => ({
+export const AddIngredient = (item: TIngredients): IAddIngredient => ({
   type: ADD_INGREDIENT,
-  id
+  item
 })
 
 export const RemoveIngredient = (index: number): IRemoveIngredient => ({
@@ -73,9 +79,9 @@ export const RemoveIngredient = (index: number): IRemoveIngredient => ({
   index
 })
 
-export const AddBun = (id: string): IAddBun => ({
+export const AddBun = (item: TIngredients): IAddBun => ({
   type: ADD_BUN,
-  id
+  item
 })
   
 export const getIngredientsRequest = (): IGetIngredientsAction => ({
@@ -91,24 +97,26 @@ export const getIngredientsFailed = (): IGetIngredientsFailedAction => ({
   type: GET_INGREDIENTS_FAILED,
 })
 
-export const AddCurrentIngredient = (): IAddCurrentIngredient => ({
+export const AddCurrentIngredient = (item: TIngredients | null): IAddCurrentIngredient => ({
   type: ADD_CURRENT_INGREDIENT,
+  item
 })
 
 export const RemoveCurrentIngredient = (): IRemoveCurrentIngredient => ({
-  type: REMOVE_CURRENT_INGREDIENT,
+  type: REMOVE_CURRENT_INGREDIENT
 })
 
-export const SortConstructorIngredients = (): ISortConstructorIngredients => ({
+export const SortConstructorIngredients = (sortedIngredients: TIngredients[]): ISortConstructorIngredients => ({
   type: SORT_CONSTRUCTOR_INGREDIENTS,
+  sortedIngredients
 })
 
 export const ClearConstructorIngredients = (): IClearConstructorIngredients => ({
-  type: CLEAR_CONSTRUCTOR_INGREDIENTS,
+  type: CLEAR_CONSTRUCTOR_INGREDIENTS
 })
 
 export const ClearOrderModal = (): IClearOrderModal => ({
-  type: CLEAR_ORDER_MODAL,
+  type: CLEAR_ORDER_MODAL
 })
 
 export type TIngredientsActions = 
@@ -123,6 +131,9 @@ export type TIngredientsActions =
   | ISortConstructorIngredients
   | IClearConstructorIngredients
   | IClearOrderModal
+  | IMakeOrderAction
+  | IMakeOrderSuccessAction
+  | IMakeOrderFailedAction
 
 export const getIngredients : AppThunk = () => (dispatch: AppDispatch) => {
 
@@ -148,5 +159,4 @@ function _checkResponse (res: Response) {
    return res.json()
   }
 
-  return Promise.reject(`Ошибка ${res.status}`)
-}
+  return Promise.reject(`Ошибка ${res.status}`)}

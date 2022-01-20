@@ -2,7 +2,7 @@ import apiLink from '../../utils/constants'
 
 import { AppDispatch, AppThunk } from "../../index"
 
-import { TOrder } from '../../utils/types';
+import { TIngredients } from '../../utils/types';
 
 export const MAKE_ORDER_REQUEST: 'MAKE_ORDER_REQUEST' = 'MAKE_ORDER_REQUEST' 
 export const MAKE_ORDER_SUCCESS: 'MAKE_ORDER_SUCCESS' = 'MAKE_ORDER_SUCCESS'
@@ -13,8 +13,9 @@ export interface IMakeOrderAction {
 }
 
 export interface IMakeOrderSuccessAction {
-  readonly type: typeof MAKE_ORDER_SUCCESS,
-  readonly order: TOrder
+  readonly type: typeof MAKE_ORDER_SUCCESS;
+  currentOrder: TIngredients[] | null;
+  orderNumber: number | null;
 }
 
 export interface IMakeOrderFailedAction {
@@ -30,10 +31,10 @@ export type TOrderActions =
     type: MAKE_ORDER_REQUEST
   })
   
-  export const makeOrderSuccess = (order: TOrder): IMakeOrderSuccessAction => ({
-    type: MAKE_ORDER_SUCCESS,
-    order
-  })
+  // export const makeOrderSuccess = (number: TOrder): IMakeOrderSuccessAction => ({
+  //   type: MAKE_ORDER_SUCCESS,
+  //   order: number
+  // })
   
   export const makeOrderFailed = (): IMakeOrderFailedAction => ({
     type: MAKE_ORDER_FAILED
@@ -43,7 +44,11 @@ export type TOrderActions =
     dispatch(makeOrderRequest())
     makeData(ingredientsId).then(res => {
       if (res && res.success) {
-        dispatch(makeOrderSuccess(res))
+        dispatch({
+          type: MAKE_ORDER_SUCCESS,
+          currentOrder: res.name,
+          orderNumber: res.order.number,
+        })
       } else {
         dispatch(makeOrderFailed())
       }
@@ -70,3 +75,5 @@ export type TOrderActions =
   
     return Promise.reject(`Ошибка ${res.status}`)
   }
+
+  
