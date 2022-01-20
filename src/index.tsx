@@ -8,8 +8,8 @@ import { applyMiddleware, createStore, compose } from 'redux'
 import { rootReducer } from './services/reducers'
 import { Action, ActionCreator } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { TOrderActions } from './services/actions/order'
-import { TIngredientsActions } from './services/actions/index'
+import { TActions } from './services/actions/index'
+
 
 
 const composeEnhancers = (window as any)['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] as typeof compose || compose;
@@ -21,7 +21,7 @@ export const store = createStore(rootReducer, enhancer)
 
 export type RootState = ReturnType<typeof store.getState>
 
-type TApplicationActions = TIngredientsActions | TOrderActions;
+type TApplicationActions = TActions;
 export type AppThunk<TReturn = void> = ActionCreator<
   ThunkAction<TReturn, Action, RootState, TApplicationActions>
 >

@@ -7,15 +7,18 @@ import {
   GET_INGREDIENTS_FAILED,
   ADD_CURRENT_INGREDIENT,
   REMOVE_CURRENT_INGREDIENT,
-  CLEAR_ORDER_MODAL,
   SORT_CONSTRUCTOR_INGREDIENTS,
   CLEAR_CONSTRUCTOR_INGREDIENTS,
-  TIngredientsActions
+  MAKE_ORDER_REQUEST,
+  MAKE_ORDER_SUCCESS,
+  MAKE_ORDER_FAILED,
+  CLEAR_ORDER_MODAL,
+  TActions
 } from "../actions/index";
 
 import { TIngredients } from '../../utils/types'
 
-type TIngredientsState = {
+type TInitialState = {
   constructorElements: TIngredients[],
   bun: TIngredients | null,
 
@@ -24,10 +27,14 @@ type TIngredientsState = {
   ingredientsFailed: boolean,
 
   currentIngredient: TIngredients | null
-  orderNumber: number | null
+
+  currentOrder: TIngredients[] | null;
+  orderNumber: number | null;
+  makeOrderRequest: boolean,
+  makeOrderFailed: boolean,
 }
 
-const initialState: TIngredientsState = {
+const initialState: TInitialState = {
   constructorElements: [],
   bun: null,
 
@@ -36,10 +43,14 @@ const initialState: TIngredientsState = {
   ingredientsFailed: false,
 
   currentIngredient: null,
-  orderNumber: null
+
+  currentOrder: null,
+  orderNumber: null,
+  makeOrderRequest: false,
+  makeOrderFailed: false,
 }
 
-export const burgerReducer = (state = initialState, action: TIngredientsActions): TIngredientsState => {
+export const burgerReducer = (state = initialState, action: TActions): TInitialState => {
   switch(action.type) {
     case ADD_INGREDIENT: {
       return {
@@ -92,12 +103,7 @@ export const burgerReducer = (state = initialState, action: TIngredientsActions)
         currentIngredient: null
       }
     }
-    case CLEAR_ORDER_MODAL: {
-      return {
-        ...state,
-        orderNumber: null
-      }
-    }
+
     case SORT_CONSTRUCTOR_INGREDIENTS: {
       return {
         ...state,
@@ -111,8 +117,39 @@ export const burgerReducer = (state = initialState, action: TIngredientsActions)
         bun: null
       }
     }
+    case MAKE_ORDER_REQUEST: {
+      return {
+        ...state,
+        makeOrderRequest: true
+      }
+    }
+    case MAKE_ORDER_SUCCESS: {
+      return {
+        ...state,
+        makeOrderRequest: false,
+        makeOrderFailed: false,
+        currentOrder: action.currentOrder,
+        orderNumber: action.orderNumber
+      }
+    }
+    case MAKE_ORDER_FAILED: {
+      return {
+        ...state,
+        makeOrderRequest: false,
+        makeOrderFailed: true
+      }
+    }
+    case CLEAR_ORDER_MODAL: {
+      return {
+        ...state,
+        orderNumber: null
+      }
+    }
     default: {
       return state
     }
   }
 }
+
+
+

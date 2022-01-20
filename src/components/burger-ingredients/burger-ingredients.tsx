@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from 'react' 
+import React, { useState, useRef, useMemo, useEffect } from 'react' 
 import IngredientsItem from '../ingredients-item/ingredients-item'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import IngredientsStyle from './burger-ingredients.module.css'
@@ -20,15 +20,17 @@ const BurgerIngredients = () => {
   const sauceTab = useRef<HTMLDivElement | null>(null)
   const mainTab = useRef<HTMLDivElement | null>(null)
 
-  // useEffect(() => {
-  //   if (current === "buns") {
-  //     bunTab.current.scrollIntoView({behavior: 'smooth'})
-  //   } else if (current === "sauces") {
-  //     sauceTab.current.scrollIntoView({behavior: 'smooth'})
-  //   } else if (current === "main") {
-  //     mainTab.current.scrollIntoView({behavior: 'smooth'})
-  //   }
-  // }, [current])
+  useEffect(() => {
+    if(bunTab.current && sauceTab.current && mainTab.current) {
+      if (current === "buns") {
+        bunTab.current.scrollIntoView({behavior: 'smooth'})
+      } else if (current === "sauces") {
+        sauceTab.current.scrollIntoView({behavior: 'smooth'})
+      } else if (current === "main") {
+        mainTab.current.scrollIntoView({behavior: 'smooth'})
+      }
+    }
+  }, [current])
   
 
   const buns = useMemo(() =>

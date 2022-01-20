@@ -2,11 +2,6 @@ import apiLink from '../../utils/constants'
 import { AppDispatch, AppThunk } from "../../index"
 import { TIngredients } from '../../utils/types'
 
-import { IMakeOrderAction, 
-  IMakeOrderSuccessAction, 
-  IMakeOrderFailedAction
- } from './order'
-
 
 export const ADD_INGREDIENT: 'ADD_INGREDIENT' = 'ADD_INGREDIENT'
 export const REMOVE_INGREDIENT: 'REMOVE_INGREDIENT' = 'REMOVE_INGREDIENT'
@@ -18,7 +13,11 @@ export const ADD_CURRENT_INGREDIENT: 'ADD_CURRENT_INGREDIENT' = 'ADD_CURRENT_ING
 export const REMOVE_CURRENT_INGREDIENT: 'REMOVE_CURRENT_INGREDIENT' = 'REMOVE_CURRENT_INGREDIENT'
 export const SORT_CONSTRUCTOR_INGREDIENTS: 'SORT_CONSTRUCTOR_INGREDIENTS' = 'SORT_CONSTRUCTOR_INGREDIENTS'
 export const CLEAR_CONSTRUCTOR_INGREDIENTS: 'CLEAR_CONSTRUCTOR_INGREDIENTS' = 'CLEAR_CONSTRUCTOR_INGREDIENTS'
+export const MAKE_ORDER_REQUEST: 'MAKE_ORDER_REQUEST' = 'MAKE_ORDER_REQUEST' 
+export const MAKE_ORDER_SUCCESS: 'MAKE_ORDER_SUCCESS' = 'MAKE_ORDER_SUCCESS'
+export const MAKE_ORDER_FAILED: 'MAKE_ORDER_FAILED' = 'MAKE_ORDER_FAILED'
 export const CLEAR_ORDER_MODAL: 'CLEAR_ORDER_MODAL' = 'CLEAR_ORDER_MODAL'
+
 
 export interface IAddIngredient {
   readonly type: typeof ADD_INGREDIENT
@@ -54,7 +53,7 @@ export interface IAddCurrentIngredient {
 }
 
 export interface IRemoveCurrentIngredient {
-  readonly type: typeof REMOVE_CURRENT_INGREDIENT,
+  readonly type: typeof REMOVE_CURRENT_INGREDIENT
 }
 
 export interface ISortConstructorIngredients {
@@ -63,12 +62,28 @@ export interface ISortConstructorIngredients {
 }
 
 export interface IClearConstructorIngredients {
-  readonly type: typeof CLEAR_CONSTRUCTOR_INGREDIENTS,
+  readonly type: typeof CLEAR_CONSTRUCTOR_INGREDIENTS
+}
+
+export interface IMakeOrderAction {
+  readonly type: typeof MAKE_ORDER_REQUEST
+}
+
+export interface IMakeOrderSuccessAction {
+  readonly type: typeof MAKE_ORDER_SUCCESS;
+  currentOrder: TIngredients[] | null;
+  orderNumber: number | null;
+}
+
+export interface IMakeOrderFailedAction {
+  readonly type: typeof MAKE_ORDER_FAILED
 }
 
 export interface IClearOrderModal {
-  readonly type: typeof CLEAR_ORDER_MODAL,
+  readonly type: typeof CLEAR_ORDER_MODAL
 }
+
+
 
 export const AddIngredient = (item: TIngredients): IAddIngredient => ({
   type: ADD_INGREDIENT,
@@ -116,11 +131,26 @@ export const ClearConstructorIngredients = (): IClearConstructorIngredients => (
   type: CLEAR_CONSTRUCTOR_INGREDIENTS
 })
 
+export const makeOrderRequest = (): IMakeOrderAction => ({
+  type: MAKE_ORDER_REQUEST
+})
+
 export const ClearOrderModal = (): IClearOrderModal => ({
   type: CLEAR_ORDER_MODAL
 })
 
-export type TIngredientsActions = 
+// export const makeOrderSuccess = (number: TOrder): IMakeOrderSuccessAction => ({
+//   type: MAKE_ORDER_SUCCESS,
+//   order: number
+// })
+
+export const makeOrderFailed = (): IMakeOrderFailedAction => ({
+  type: MAKE_ORDER_FAILED
+})
+
+
+
+export type TActions = 
   | IAddIngredient
   | IRemoveIngredient
   | IAddBun
@@ -131,10 +161,13 @@ export type TIngredientsActions =
   | IRemoveCurrentIngredient
   | ISortConstructorIngredients
   | IClearConstructorIngredients
-  | IClearOrderModal
   | IMakeOrderAction
   | IMakeOrderSuccessAction
   | IMakeOrderFailedAction
+  | IMakeOrderAction
+  | IMakeOrderSuccessAction
+  | IMakeOrderFailedAction
+  | IClearOrderModal
 
 export const getIngredients : AppThunk = () => (dispatch: AppDispatch) => {
 
@@ -161,3 +194,33 @@ function _checkResponse (res: Response) {
   }
 
   return Promise.reject(`Ошибка ${res.status}`)}
+
+  export const makeOrder: AppThunk = (ingredientsId: string[]) => (dispatch: AppDispatch) => {
+    dispatch(makeOrderRequest())
+    makeData(ingredientsId).then(res => {
+      if (res && res.success) {
+        dispatch({
+          type: MAKE_ORDER_SUCCESS,
+          currentOrder: res.name,
+          orderNumber: res.order.number,
+        })
+      } else {
+        dispatch(makeOrderFailed())
+      }
+    }).catch(err => console.log(`Error: ${err}`))
+  }
+  
+  export const makeData = async(ingredientsId: string[]) => {
+    return await fetch(`${apiLink}/orders`, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ingredients: ingredientsId
+      })
+    }).then(_checkResponse)
+  }
+
+  
