@@ -1,12 +1,24 @@
-import React, { useRef } from 'react'
+import React, { useRef, FC } from 'react'
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useDrop, useDrag } from 'react-dnd'
 import { useDispatch } from 'react-redux'
 import { REMOVE_INGREDIENT } from '../../services/actions'
+import { TIngredients } from '../../utils/types'
 
-const BurgerConstructorElement = ({ ingredient, index, moveIngredient }) => {
+interface IBurgerConstructorElement {
+  ingredient: TIngredients
+  index: number
+  moveIngredient: Function
+}
+
+type TItem = {
+  id: string, 
+  index: number
+}
+
+const BurgerConstructorElement: FC<IBurgerConstructorElement> = ({ ingredient, index, moveIngredient }) => {
   const dispatch = useDispatch()
-  const ref = useRef(null)
+  const ref = useRef<HTMLLIElement>(null)
 
   const [{ handlerId }, drop] = useDrop({
     accept: "constructorIngredient",
@@ -15,7 +27,7 @@ const BurgerConstructorElement = ({ ingredient, index, moveIngredient }) => {
         handlerId: monitor.getHandlerId(),
       };
     },
-    hover(item, monitor) {
+    hover(item: TItem, monitor) {
       if (!ref.current) {
         return;
       }
@@ -29,7 +41,11 @@ const BurgerConstructorElement = ({ ingredient, index, moveIngredient }) => {
       const hoverBoundingRect = ref.current?.getBoundingClientRect()
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
       const clientOffset = monitor.getClientOffset()
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top
+
+      let hoverClientY = 0
+      if (clientOffset !== null) {
+        hoverClientY = clientOffset.y - hoverBoundingRect.top
+      }
 
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return;
@@ -57,7 +73,7 @@ const BurgerConstructorElement = ({ ingredient, index, moveIngredient }) => {
 
   drag(drop(ref));
 
-  function handleRemoveIngredient(index) {
+  function handleRemoveIngredient(index: number) {
     dispatch({
       type: REMOVE_INGREDIENT,
       index: index
@@ -67,7 +83,7 @@ const BurgerConstructorElement = ({ ingredient, index, moveIngredient }) => {
   return (
     <li className={'ml-4'} style={{ opacity }} ref={ref} data-handler-id={handlerId}>
       <ConstructorElement
-        type={null}
+        type={undefined}
         isLocked={false}
         handleClose={() => handleRemoveIngredient(index)}
         text={ingredient.name}

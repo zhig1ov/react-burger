@@ -47,7 +47,7 @@ export type TOrderActions =
         dispatch({
           type: MAKE_ORDER_SUCCESS,
           currentOrder: res.name,
-          orderNumber: res.order.number,
+          orderNumber: res.order.orderNumber,
         })
       } else {
         dispatch(makeOrderFailed())

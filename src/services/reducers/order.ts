@@ -36,7 +36,6 @@ export const orderReducer= (state = initialState, action: TOrderActions): TOrder
         ...state,
         makeOrderRequest: false,
         makeOrderFailed: false,
-        makeOrderSuccess: true,
         currentOrder: action.currentOrder,
         orderNumber: action.orderNumber
       }

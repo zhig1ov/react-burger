@@ -1,32 +1,34 @@
-import React, { useState, useRef, useMemo, useEffect } from 'react' 
+import React, { useState, useRef, useMemo } from 'react' 
 import IngredientsItem from '../ingredients-item/ingredients-item'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import IngredientsStyle from './burger-ingredients.module.css'
-import { useSelector, useDispatch } from 'react-redux'
+import {  useDispatch } from 'react-redux'
 import { ADD_CURRENT_INGREDIENT, REMOVE_CURRENT_INGREDIENT } from '../../services/actions'
 import Modal from '../modal/modal'
 import IngredientDeatils from '../ingredient-details/ingredient-details'
+import { useSelectorHook } from "../../services/hooks/hooks"
+import { TIngredients } from '../../utils/types'
 
 
 const BurgerIngredients = () => {
-  const ingredients = useSelector(state => state.burger.ingredients)
+  const ingredients = useSelectorHook(state => state.burger.ingredients)
   const dispatch = useDispatch()
 
   const [current, setCurrent] = useState('buns')
 
-  const bunTab = useRef();
-  const sauceTab = useRef();
-  const mainTab = useRef();
+  const bunTab = useRef<HTMLDivElement | null>(null)
+  const sauceTab = useRef<HTMLDivElement | null>(null)
+  const mainTab = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (current === "buns") {
-      bunTab.current.scrollIntoView({behavior: 'smooth'})
-    } else if (current === "sauces") {
-      sauceTab.current.scrollIntoView({behavior: 'smooth'})
-    } else if (current === "main") {
-      mainTab.current.scrollIntoView({behavior: 'smooth'})
-    }
-  }, [current])
+  // useEffect(() => {
+  //   if (current === "buns") {
+  //     bunTab.current.scrollIntoView({behavior: 'smooth'})
+  //   } else if (current === "sauces") {
+  //     sauceTab.current.scrollIntoView({behavior: 'smooth'})
+  //   } else if (current === "main") {
+  //     mainTab.current.scrollIntoView({behavior: 'smooth'})
+  //   }
+  // }, [current])
   
 
   const buns = useMemo(() =>
@@ -38,7 +40,7 @@ const BurgerIngredients = () => {
   const sauces = useMemo(() =>
    ingredients.filter((ingredient) => ingredient.type === 'sauce'), [ingredients])
 
-  const handleOpen = (item) => {
+  const handleOpen = (item: TIngredients) => {
     dispatch({
       type: ADD_CURRENT_INGREDIENT,
       item: item
@@ -51,21 +53,23 @@ const BurgerIngredients = () => {
     })
   }
 
-  const currentModalIngredient = useSelector(state => state.burger.currentIngredient)
+  const currentModalIngredient = useSelectorHook(state => state.burger.currentIngredient)
 
-  const handleScroll = (e) => {
+  const handleScroll = (e: any) => {
     const topPrice = e.target.getBoundingClientRect().top
-    
-    const bunPosition = { top: bunTab.current.getBoundingClientRect().top, bottom: bunTab.current.getBoundingClientRect().bottom }
-    const mainPosition= { top: mainTab.current.getBoundingClientRect().top, bottom: mainTab.current.getBoundingClientRect().bottom }
-    const saucePosition = { top: sauceTab.current.getBoundingClientRect().top, bottom: sauceTab.current.getBoundingClientRect().bottom }
 
-    if (bunPosition.top <= topPrice && bunPosition.bottom > topPrice) {
-      setCurrent('buns')
-    } else if (saucePosition.top <= topPrice && saucePosition.bottom > topPrice) {
-      setCurrent('sauces')
-    } else if (mainPosition.top <= topPrice && mainPosition.bottom > topPrice) {
-      setCurrent('main')
+    if (bunTab.current && mainTab.current && sauceTab.current) {
+      const bunPosition = { top: bunTab.current.getBoundingClientRect().top, bottom: bunTab.current.getBoundingClientRect().bottom }
+      const mainPosition= { top: mainTab.current.getBoundingClientRect().top, bottom: mainTab.current.getBoundingClientRect().bottom }
+      const saucePosition = { top: sauceTab.current.getBoundingClientRect().top, bottom: sauceTab.current.getBoundingClientRect().bottom }
+  
+      if (bunPosition.top <= topPrice && bunPosition.bottom > topPrice) {
+        setCurrent('buns')
+      } else if (saucePosition.top <= topPrice && saucePosition.bottom > topPrice) {
+        setCurrent('sauces')
+      } else if (mainPosition.top <= topPrice && mainPosition.bottom > topPrice) {
+        setCurrent('main')
+      }
     }
   }
 

@@ -6,12 +6,13 @@ import appStyle from './app.module.css';
 import apiLink from '../../utils/constants';
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getIngredients } from '../../services/actions/index'
+import { useSelectorHook } from "../../services/hooks/hooks"
 
 const App = () => {
   const dispatch = useDispatch()
-  const ingredients = useSelector(state => state.burger.ingredients)
+  const ingredients = useSelectorHook(state => state.burger.ingredients)
 
   useEffect(() => {
     dispatch(getIngredients())

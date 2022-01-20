@@ -2,8 +2,9 @@ import apiLink from '../../utils/constants'
 import { AppDispatch, AppThunk } from "../../index"
 import { TIngredients } from '../../utils/types'
 
-import { IMakeOrderAction, IMakeOrderSuccessAction
-  , IMakeOrderFailedAction
+import { IMakeOrderAction, 
+  IMakeOrderSuccessAction, 
+  IMakeOrderFailedAction
  } from './order'
 
 
@@ -46,7 +47,7 @@ export interface IGetIngredientsSuccessAction {
 export interface IGetIngredientsFailedAction {
   readonly type: typeof GET_INGREDIENTS_FAILED,
 }
-//
+
 export interface IAddCurrentIngredient {
   readonly type: typeof ADD_CURRENT_INGREDIENT,
   item: TIngredients | null

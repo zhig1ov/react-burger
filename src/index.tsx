@@ -18,6 +18,7 @@ const enhancer = composeEnhancers(applyMiddleware(thunk))
 
 export const store = createStore(rootReducer, enhancer)
 
+
 export type RootState = ReturnType<typeof store.getState>
 
 type TApplicationActions = TIngredientsActions | TOrderActions;

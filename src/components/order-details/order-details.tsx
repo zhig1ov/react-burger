@@ -1,12 +1,10 @@
 import React from 'react'
-import { useSelectorHook } from "../../services/hooks/hooks";
+import { useSelectorHook } from "../../services/hooks/hooks"
 import orderDetailsStyle from './order-details.module.css'
 
-const OrderDetails: React.FC = () => {
-  const orderNumber = useSelectorHook(
-    (state) => state.burger.orderNumber
-  );
-
+const OrderDetails = () => {
+  const orderNumber = useSelectorHook(state => state.burger.orderNumber)
+  console.log(orderNumber)
   return (
     <div className={`pt-8 pb-30 ${orderDetailsStyle.container}`}>
       <p className={`pt-9 pb-8 text text_type_digits-large`}>{orderNumber}</p>
