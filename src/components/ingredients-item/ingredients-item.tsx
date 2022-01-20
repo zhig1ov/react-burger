@@ -1,7 +1,7 @@
 import React, { useMemo, FC } from 'react'
 import IngredientsItemStyle from './ingredients-item.module.css'
 import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components"
-import { useSelectorHook } from "../../services/hooks/hooks";
+import { useSelectorHook } from "../../services/hooks/hooks"
 import { useDrag } from 'react-dnd'
 import { TIngredients } from '../../utils/types'
 

@@ -10,8 +10,6 @@ import { Action, ActionCreator } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { TActions } from './services/actions/index'
 
-
-
 const composeEnhancers = (window as any)['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] as typeof compose || compose;
 
 const enhancer = composeEnhancers(applyMiddleware(thunk))

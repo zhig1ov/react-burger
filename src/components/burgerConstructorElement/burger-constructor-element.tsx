@@ -1,7 +1,7 @@
 import React, { useRef, FC } from 'react'
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useDrop, useDrag } from 'react-dnd'
-import { useDispatch } from 'react-redux'
+import { useDispatchHook } from '../../services/hooks/hooks'
 import { REMOVE_INGREDIENT } from '../../services/actions'
 import { TIngredients } from '../../utils/types'
 
@@ -17,7 +17,7 @@ type TItem = {
 }
 
 const BurgerConstructorElement: FC<IBurgerConstructorElement> = ({ ingredient, index, moveIngredient }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatchHook()
   const ref = useRef<HTMLLIElement>(null)
 
   const [{ handlerId }, drop] = useDrop({

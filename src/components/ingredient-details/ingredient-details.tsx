@@ -1,6 +1,6 @@
 import React from 'react'
 import ingredientDetailsStyles from './ingredient-details.module.css'
-import { useSelectorHook } from "../../services/hooks/hooks";
+import { useSelectorHook } from "../../services/hooks/hooks"
 
 const IngredientDeatils = () => {
   const ingredients = useSelectorHook(state => state.burger.currentIngredient)

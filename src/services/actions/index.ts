@@ -85,17 +85,17 @@ export interface IClearOrderModal {
 
 
 
-export const AddIngredient = (item: TIngredients): IAddIngredient => ({
+export const addIngredient = (item: TIngredients): IAddIngredient => ({
   type: ADD_INGREDIENT,
   item
 })
 
-export const RemoveIngredient = (index: number): IRemoveIngredient => ({
+export const removeIngredient = (index: number): IRemoveIngredient => ({
   type: REMOVE_INGREDIENT,
   index
 })
 
-export const AddBun = (item: TIngredients): IAddBun => ({
+export const addBun = (item: TIngredients): IAddBun => ({
   type: ADD_BUN,
   item
 })
@@ -113,21 +113,21 @@ export const getIngredientsFailed = (): IGetIngredientsFailedAction => ({
   type: GET_INGREDIENTS_FAILED,
 })
 
-export const AddCurrentIngredient = (item: TIngredients | null): IAddCurrentIngredient => ({
+export const addCurrentIngredient = (item: TIngredients | null): IAddCurrentIngredient => ({
   type: ADD_CURRENT_INGREDIENT,
   item
 })
 
-export const RemoveCurrentIngredient = (): IRemoveCurrentIngredient => ({
+export const removeCurrentIngredient = (): IRemoveCurrentIngredient => ({
   type: REMOVE_CURRENT_INGREDIENT
 })
 
-export const SortConstructorIngredients = (sortedIngredients: TIngredients[]): ISortConstructorIngredients => ({
+export const sortConstructorIngredients = (sortedIngredients: TIngredients[]): ISortConstructorIngredients => ({
   type: SORT_CONSTRUCTOR_INGREDIENTS,
   sortedIngredients
 })
 
-export const ClearConstructorIngredients = (): IClearConstructorIngredients => ({
+export const clearConstructorIngredients = (): IClearConstructorIngredients => ({
   type: CLEAR_CONSTRUCTOR_INGREDIENTS
 })
 
@@ -135,7 +135,7 @@ export const makeOrderRequest = (): IMakeOrderAction => ({
   type: MAKE_ORDER_REQUEST
 })
 
-export const ClearOrderModal = (): IClearOrderModal => ({
+export const clearOrderModal = (): IClearOrderModal => ({
   type: CLEAR_ORDER_MODAL
 })
 
