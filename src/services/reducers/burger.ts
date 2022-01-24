@@ -7,15 +7,34 @@ import {
   GET_INGREDIENTS_FAILED,
   ADD_CURRENT_INGREDIENT,
   REMOVE_CURRENT_INGREDIENT,
+  SORT_CONSTRUCTOR_INGREDIENTS,
+  CLEAR_CONSTRUCTOR_INGREDIENTS,
   MAKE_ORDER_REQUEST,
   MAKE_ORDER_SUCCESS,
   MAKE_ORDER_FAILED,
   CLEAR_ORDER_MODAL,
-  SORT_CONSTRUCTOR_INGREDIENTS,
-  CLEAR_CONSTRUCTOR_INGREDIENTS
+  TActions
 } from "../actions/index";
 
-const initialState = {
+import { TIngredients } from '../../utils/types'
+
+type TInitialState = {
+  constructorElements: TIngredients[],
+  bun: TIngredients | null,
+
+  ingredients: TIngredients[],
+  ingredientsRequest: boolean,
+  ingredientsFailed: boolean,
+
+  currentIngredient: TIngredients | null
+
+  currentOrder: TIngredients[] | null;
+  orderNumber: number | null;
+  makeOrderRequest: boolean,
+  makeOrderFailed: boolean,
+}
+
+const initialState: TInitialState = {
   constructorElements: [],
   bun: null,
 
@@ -25,18 +44,19 @@ const initialState = {
 
   currentIngredient: null,
 
+  currentOrder: null,
+  orderNumber: null,
   makeOrderRequest: false,
   makeOrderFailed: false,
-  currentOrder: null,
-  orderNumber: null
 }
 
-export const burgerReducer = (state = initialState, action) => {
+export const burgerReducer = (state = initialState, action: TActions): TInitialState => {
   switch(action.type) {
     case ADD_INGREDIENT: {
       return {
         ...state,
         constructorElements: [...state.constructorElements, action.item]
+
       }
     }
     case REMOVE_INGREDIENT: {
@@ -83,6 +103,20 @@ export const burgerReducer = (state = initialState, action) => {
         currentIngredient: null
       }
     }
+
+    case SORT_CONSTRUCTOR_INGREDIENTS: {
+      return {
+        ...state,
+        constructorElements: action.sortedIngredients
+      }
+    }
+    case CLEAR_CONSTRUCTOR_INGREDIENTS: {
+      return {
+        ...state,
+        constructorElements: [],
+        bun: null
+      }
+    }
     case MAKE_ORDER_REQUEST: {
       return {
         ...state,
@@ -111,21 +145,11 @@ export const burgerReducer = (state = initialState, action) => {
         orderNumber: null
       }
     }
-    case SORT_CONSTRUCTOR_INGREDIENTS: {
-      return {
-        ...state,
-        constructorElements: action.sortedIngredients
-      }
-    }
-    case CLEAR_CONSTRUCTOR_INGREDIENTS: {
-      return {
-        ...state,
-        constructorElements: [],
-        bun: null
-      }
-    }
     default: {
       return state
     }
   }
 }
+
+
+

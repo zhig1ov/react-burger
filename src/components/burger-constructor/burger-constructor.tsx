@@ -4,20 +4,23 @@ import construcorStyle from './burger-constructor.module.css'
 import OrderDetails from '../order-details/order-details'
 import Modal from '../modal/modal'
 import { useDrop } from 'react-dnd'
-import { useDispatch, useSelector } from 'react-redux'
-import { ADD_BUN, ADD_INGREDIENT, CLEAR_CONSTRUCTOR_INGREDIENTS, CLEAR_ORDER_MODAL, SORT_CONSTRUCTOR_INGREDIENTS, makeOrder } from '../../services/actions'
+import { useDispatchHook } from '../../services/hooks/hooks'
+import { ADD_BUN, ADD_INGREDIENT, CLEAR_CONSTRUCTOR_INGREDIENTS, CLEAR_ORDER_MODAL, SORT_CONSTRUCTOR_INGREDIENTS } from '../../services/actions/index'
 import update from 'immutability-helper'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
 import BurgerConstructorElement from '../burgerConstructorElement/burger-constructor-element'
+import { makeOrder } from '../../services/actions/index'
+import { useSelectorHook } from "../../services/hooks/hooks"
+import { TIngredients } from '../../utils/types'
 
 
 const BurgerConstructor = () => {
-  const dispatch = useDispatch()
-  const constructorElements = useSelector(state => state.burger.constructorElements)
-  const orderNumber = useSelector(state => state.burger.orderNumber)
-  const bun = useSelector(state => state.burger.bun)
-
-  const [ totalPrice, setTotalPrice ] = useState(0)
+  const dispatch = useDispatchHook()
+  const constructorElements = useSelectorHook(state => state.burger.constructorElements)
+  const orderNumber = useSelectorHook(state => state.burger.orderNumber)
+  const bun = useSelectorHook(state => state.burger.bun)
+  console.log(orderNumber)
+  const [ totalPrice, setTotalPrice ] = useState<number>(0)
 
   useEffect(() => {
     if(bun) {
@@ -50,12 +53,12 @@ const BurgerConstructor = () => {
 
     const [, dropTarget] = useDrop({
       accept: 'ingredient',
-      drop(ingredient) {
+      drop(ingredient: {ingredient: TIngredients}) {
         dropHandler(ingredient)
       }
     })
 
-    function dropHandler(ingredient) {
+    function dropHandler(ingredient: {ingredient: TIngredients}): void {
       if (ingredient.ingredient.type !== 'bun') {
         dispatch ({
           type: ADD_INGREDIENT,
@@ -117,7 +120,7 @@ const BurgerConstructor = () => {
         <div className={`${construcorStyle.flex} ${construcorStyle.flexCheck} pt-10`}>
           <div className={`${construcorStyle.flex} pr-10`}>
             <p className="text text_type_digits-medium text_color_primary pr-2"> {totalPrice} </p>
-            <CurrencyIcon className="pr-10" />
+            <CurrencyIcon type={'primary'} />
           </div>
           <Button type="primary" size="medium" onClick={handleOpen}>
             Оформить заказ
@@ -128,7 +131,6 @@ const BurgerConstructor = () => {
         <Modal handleClose={handleClose}>
           <OrderDetails></OrderDetails>
         </Modal>
-      
       }
     </section>
   )

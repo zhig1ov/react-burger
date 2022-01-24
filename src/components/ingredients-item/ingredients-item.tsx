@@ -1,14 +1,18 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, FC } from 'react'
 import IngredientsItemStyle from './ingredients-item.module.css'
 import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components"
-import ingredientsShape from '../../utils/types'
+import { useSelectorHook } from "../../services/hooks/hooks"
 import { useDrag } from 'react-dnd'
-import { useSelector } from 'react-redux'
-import PropTypes from 'prop-types'
+import { TIngredients } from '../../utils/types'
 
-const IngredientsItem = ({ ingredient, handleClick }) => {
-  const constructorElements = useSelector(state => state.burger.constructorElements)
-  const bun = useSelector(state => state.burger.bun)
+interface IIngredientsItem {
+  handleClick: Function,
+  ingredient: TIngredients
+}
+
+const IngredientsItem: FC<IIngredientsItem> = ({ ingredient, handleClick }) => {
+  const constructorElements = useSelectorHook(state => state.burger.constructorElements)
+  const bun = useSelectorHook(state => state.burger.bun)
 
   const count = useMemo(() => {
     if (ingredient.type !== 'bun') {
@@ -25,8 +29,8 @@ const IngredientsItem = ({ ingredient, handleClick }) => {
 
   return (
     <article onClick={() => handleClick(ingredient)} className={IngredientsItemStyle.container} ref={dragRef}>
-      {count > 0 && 
-        <Counter count={count} size="default" />}
+      {count! > 0 && 
+        <Counter count={count!} size="default" />}
       <img src={ingredient.image} alt={ingredient.name} />
       <div className={`${IngredientsItemStyle.flex} pb-1 pt-1`} >
         <span style={{textAlign: "center"}} className="text text_type_digits-default">{ingredient.price}</span>
@@ -35,11 +39,6 @@ const IngredientsItem = ({ ingredient, handleClick }) => {
       <p className="text text_type_main-default text_color_primary">{ingredient.name}</p>
     </article>
   )
-}
-
-IngredientsItem.propTypes = {
-  ingredient: ingredientsShape.isRequired,
-  handleClick: PropTypes.func.isRequired
 }
 
 export default IngredientsItem
