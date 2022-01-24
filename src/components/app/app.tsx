@@ -9,6 +9,10 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useDispatchHook } from '../../services/hooks/hooks'
 import { getIngredients } from '../../services/actions/index'
 import { useSelectorHook } from "../../services/hooks/hooks"
+import { ForgotPassword } from '../../pages/forgot-password'
+import { ResetPassword } from '../../pages/reset-password'
+import { Register } from '../../pages/register'
+import { Login } from '../../pages/login'
 
 const App = () => {
   const dispatch = useDispatchHook()
@@ -22,12 +26,13 @@ const App = () => {
     <div className={appStyle.app}>
       <AppHeader />
       <main className={appStyle.main} >
-        {ingredients && 
+        <Login />
+        {/* {ingredients && 
           <DndProvider backend={HTML5Backend}>
             <BurgerIngredients />
             <BurgerConstructor  />
           </DndProvider>
-      }
+      } */}
       </main>
     </div>
   );
