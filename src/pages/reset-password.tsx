@@ -1,13 +1,18 @@
-import React, { FC, useState, ChangeEvent, MouseEvent } from "react";
-import ResetPasswordStyle from './reset-password.module.css'
+import React, { useState, ChangeEvent, useEffect } from "react";
+// import ResetPasswordStyle from './reset-password.module.css'
 import {  Button, Input } from '@ya.praktikum/react-developer-burger-ui-components'
 import { AuthForm } from "../components/auth-form/auth-form"
+import { Link, Redirect, useHistory } from 'react-router-dom'
+import { useDispatchHook, useSelectorHook } from "../services/hooks/hooks";
+import { resetPasswordCode } from '../services/actions/user'
 
-export const ResetPassword = () => {
-  const [passwordValue, setPasswordValue] = React.useState('')
-  const [codeValue, setCodeValue] = React.useState('')
+export const ResetPasswordPage = () => {
+  const [passwordValue, setPasswordValue] = useState('')
+  const [codeValue, setCodeValue] = useState('')
   const [passwordShow, setPasswordShow] = useState(false)
-  
+  let { resetPasswordCodeSuccess, name } = useSelectorHook((state) => state.user)
+  const dispatch = useDispatchHook()
+  const history = useHistory()
   const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
     setPasswordValue(e.target.value)
   }
@@ -16,7 +21,20 @@ export const ResetPassword = () => {
     setCodeValue(e.target.value)
   }
 
-  const onFormSubmit = () => setCodeValue('asds');
+  const onFormSubmit = () => {
+    dispatch(resetPasswordCode({ password: passwordValue, code: codeValue }))
+  }
+
+  useEffect(() => {
+    if (resetPasswordCodeSuccess) {
+      resetPasswordCodeSuccess = false
+      history.push('/login')
+    }
+  }, [resetPasswordCodeSuccess, history])
+
+  if (name) {
+    return <Redirect to='/' />
+  }
 
   return (
     <AuthForm title={'Восстановление пароля'} onSubmit={onFormSubmit} >
@@ -26,7 +44,7 @@ export const ResetPassword = () => {
           name={"password"}
           placeholder="Введите новый пароль"
           size="default"
-          onChange={(e) => setPasswordValue(e.target.value)}
+          onChange={onChangePassword}
           icon={passwordShow ? 'ShowIcon' : 'HideIcon'}
           onIconClick={() => setPasswordShow(!passwordShow)}
         />
@@ -44,7 +62,7 @@ export const ResetPassword = () => {
         </Button>
           <p className={`text text_type_main-default text_color_inactive mt-20`}>
             Вспомнили пароль?&ensp;
-            {/* <Link to={'/login'}>Войти</Link> */}
+            <Link to={'/login'} className='text text_color_accent'>Войти</Link>
           </p>
       </AuthForm>
   )

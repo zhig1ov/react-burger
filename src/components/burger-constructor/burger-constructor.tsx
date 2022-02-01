@@ -19,7 +19,6 @@ const BurgerConstructor = () => {
   const constructorElements = useSelectorHook(state => state.burger.constructorElements)
   const orderNumber = useSelectorHook(state => state.burger.orderNumber)
   const bun = useSelectorHook(state => state.burger.bun)
-  console.log(orderNumber)
   const [ totalPrice, setTotalPrice ] = useState<number>(0)
 
   useEffect(() => {

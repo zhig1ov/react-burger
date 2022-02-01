@@ -8,10 +8,6 @@
   min-height: 290px;
 }
 
-.head {
-  padding: 0;
-}
-
 .form {
   width: 100%;
   display: flex;
@@ -20,11 +16,7 @@
   gap: 24px;
 }
 
-.form:nth-last-col {
-
-  gap: 0px;
-}
-
-.input__container {
+.form div {
   width: 100%;
+  text-align: right;
 }

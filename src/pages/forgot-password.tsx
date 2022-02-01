@@ -1,21 +1,36 @@
-import React, { FC, useState, ChangeEvent } from "react";
-import forgotPasswordStyle from './forgot-password.module.css'
+import React, { useState, ChangeEvent, SyntheticEvent, useEffect } from "react";
+// import forgotPasswordStyle from './forgot-password.module.css'
 import { AuthForm } from '../components/auth-form/auth-form'
-import { Link } from 'react-router-dom'
+import { Link, useHistory, Redirect } from 'react-router-dom'
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useDispatchHook } from "../services/hooks/hooks"
+import { useDispatchHook, useSelectorHook } from '../services/hooks/hooks'
+import { resetPassword } from '../services/actions/user'
 
-export const ForgotPassword = () => {
+export const ForgotPasswordPage = () => {
   const [emailValue, setEmailValue] = useState('')
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmailValue(e.target.value)
-  }
+  const dispatch = useDispatchHook()
+  const history = useHistory()
+  let { resetPasswordSuccess, name } = useSelectorHook(state => state.user)
   
   const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
     setEmailValue(e.target.value)
   }
   
-  const onFormSubmit = () => setEmailValue('asds')
+  const onFormSubmit = () => {
+    dispatch(resetPassword({ email: emailValue}))
+  }
+  
+  useEffect(() => {
+    if (resetPasswordSuccess) {
+      resetPasswordSuccess = false
+      history.push('/reset-password')
+    }
+  }, [history, resetPasswordSuccess])
+  
+  if (name) {
+    return <Redirect to='/' />
+  }
+
 
   return (
     <AuthForm title={'Восстановление пароля'} onSubmit={onFormSubmit}>
@@ -26,7 +41,7 @@ export const ForgotPassword = () => {
           value={emailValue}
           name={'email'}
           error={false}
-          errorText={undefined}
+          errorText={''}
           size={'default'}
         />
         <Button type="primary" size="medium">
@@ -34,7 +49,7 @@ export const ForgotPassword = () => {
         </Button>
         <p className={`text text_type_main-default text_color_inactive mt-20`}>
           Вспомнили пароль?&ensp;
-            {/* <Link to={'/login'}>Войти</Link> */}
+            <Link to={'/login'} className='text text_color_accent'>Войти</Link>
         </p>
       </AuthForm>
   )

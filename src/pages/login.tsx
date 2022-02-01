@@ -1,10 +1,10 @@
 import React, { useState, ChangeEvent } from "react"
-import loginStyles from './login.module.css'
+// import loginStyles from './login.module.css'
 import { AuthForm } from '../components/auth-form/auth-form'
-import { Link } from 'react-router-dom'
-import { Input, EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components'
+import { Link, NavLink } from 'react-router-dom'
+import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 
-export const Login = () => {
+export const LoginPage = () => {
   const [emailValue, setEmailValue] = useState('')
   const [passwordValue, setPasswordValue] = useState('')
 
@@ -36,11 +36,11 @@ export const Login = () => {
       </Button>
       <p className={`text text_type_main-default text_color_inactive mt-20`}>
         Вы — новый пользователь?&ensp;
-        {/* <Link to={'/login'}>Войти</Link> */}
+        <NavLink to={'/register'} className='text text_color_accent'>Зарегистрироваться</NavLink>
       </p>
       <p className={`text text_type_main-default text_color_inactive mt-4`}>
         Забыли пароль?&ensp;
-        {/* <Link to={'/login'}>Войти</Link> */}
+        <Link to={'/forgot-password'} className='text text_color_accent'>Восстановить пароль</Link>
       </p>
     </AuthForm>
   )

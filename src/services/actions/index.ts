@@ -1,4 +1,4 @@
-import apiLink from '../../utils/constants'
+import {apiLink} from '../../utils/constants'
 import { AppDispatch, AppThunk } from "../../index"
 import { TIngredients } from '../../utils/types'
 
@@ -188,12 +188,12 @@ const downloadData = async () => {
   return await fetch(`${apiLink}/ingredients`).then(_checkResponse)
 }
 
-function _checkResponse (res: Response) {
+export function _checkResponse (res: Response) {
   if (res.ok) {
    return res.json()
   }
-
-  return Promise.reject(`Ошибка ${res.status}`)}
+  return Promise.reject(`Ошибка ${res.status}`)
+}
 
   export const makeOrder: AppThunk = (ingredientsId: string[]) => (dispatch: AppDispatch) => {
     dispatch(makeOrderRequest())

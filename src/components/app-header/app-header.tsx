@@ -1,6 +1,9 @@
-import React from 'react';
-import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import headerStyle from './app-header.module.css';
+import React from 'react'
+import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
+import headerStyle from './app-header.module.css'
+import { Link } from 'react-router-dom'
+
+import { _checkResponse } from '../../services/actions/index'
 
 const AppHeader = () => {
   return(
@@ -19,7 +22,7 @@ const AppHeader = () => {
       <Logo />
       <a className={`${headerStyle.item} pt-4 pb-4 pl-5 pr-5 ml-2`} href="/#">
         <ProfileIcon type="primary" />
-        <p className={`text text_type_main-default text_color_inactive pl-2`}>Личный кабинет</p>
+        <p className={`text text_type_main-default text_color_inactive pl-2`}><Link to={'/profile'}>Личный кабинет</Link></p>
       </a>
       </nav>
     </header>
