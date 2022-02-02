@@ -1,12 +1,20 @@
-import React, { useState, ChangeEvent } from "react"
+import React, { useState, ChangeEvent, useEffect } from "react"
 // import loginStyles from './login.module.css'
 import { AuthForm } from '../components/auth-form/auth-form'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useHistory, Redirect, useLocation } from 'react-router-dom'
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components'
+import { useDispatchHook, useSelectorHook } from "../services/hooks/hooks"
+import { login } from "../services/actions/user"
+import { TLocationTemplate} from '../utils/types'
 
 export const LoginPage = () => {
   const [emailValue, setEmailValue] = useState('')
   const [passwordValue, setPasswordValue] = useState('')
+  const user = useSelectorHook((state) => state.user)
+  const dispatch = useDispatchHook()
+  const history = useHistory()
+  const location = useLocation<TLocationTemplate>()
+
 
   const onChangeEmail = (e: ChangeEvent<HTMLInputElement>)=> {
     setEmailValue(e.target.value)
@@ -16,7 +24,21 @@ export const LoginPage = () => {
     setPasswordValue(e.target.value)
   }
 
-  const onFormSubmit = () => setEmailValue('asds');
+  const onFormSubmit = () => {
+    dispatch(login({ email: emailValue, password: passwordValue }))
+  }
+
+  useEffect(() => {
+    if (user.loginSuccess) {
+      user.loginSuccess = false
+      history.push('/')
+    }
+  }, [user, history])
+
+  if (user.name) {
+    const { from } = location.state || { from: { pathname: '/' } }
+    return <Redirect to={from} />
+  }
 
   return (
     <AuthForm title={'Вход'} onSubmit={onFormSubmit}>
@@ -35,7 +57,7 @@ export const LoginPage = () => {
         Войти
       </Button>
       <p className={`text text_type_main-default text_color_inactive mt-20`}>
-        Вы — новый пользователь?&ensp;
+        Вы — новый пользователь?&ensp;
         <NavLink to={'/register'} className='text text_color_accent'>Зарегистрироваться</NavLink>
       </p>
       <p className={`text text_type_main-default text_color_inactive mt-4`}>

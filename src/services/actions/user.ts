@@ -1,4 +1,3 @@
-import React from 'react'
 import { AppThunk, AppDispatch } from '../../index'
 import { setCookie } from '../../utils/utils'
 import { _checkResponse } from './index'
@@ -210,7 +209,7 @@ export type TUserActions =
 
   export const postUpdateUser = async (name: string, email: string, accessToken: string) => {
     return await fetch(`${authLink}/user`, {
-      method: "POST",
+      method: "PATCH",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
@@ -269,28 +268,24 @@ export type TUserActions =
     }).then(_checkResponse)
   }
 
-  export const resetPassword: AppThunk =
-  ({ email }) =>
-  (dispatch: AppDispatch) => {
+  export const resetPassword: AppThunk =({ email }) =>(dispatch: AppDispatch) => {
     dispatch({
       type: RESET_PASSWORD_REQUEST,
-    });
+    })
     postResetPassword(email).then((res) => {
       if (res && res.success) {
         dispatch({
           type: RESET_PASSWORD_SUCCESS,
-        });
+        })
       } else {
         dispatch({
           type: RESET_PASSWORD_FAILED,
-        });
+        })
       }
-    });
-  };
+    }).catch((error) => console.log(`Error: ${error}`))
+  }
 
-  export const resetPasswordCode: AppThunk = 
-  ({password, code}) => 
-  (dispatch: AppDispatch) => {
+  export const resetPasswordCode: AppThunk = ({password, code}) => (dispatch: AppDispatch) => {
     dispatch({
       type: RESET_PASSWORD_CODE_REQUEST
     })
@@ -304,7 +299,7 @@ export type TUserActions =
           type: RESET_PASSWORD_CODE_FAILED
         })
       }
-    })
+    }).catch((error) => console.log(`Error: ${error}`))
   }
 
   export const createUser: AppThunk = ({email, password, name}) => (dispatch: AppDispatch) => {
@@ -320,16 +315,16 @@ export type TUserActions =
           loggedIn: true
         })
         
-        let accessToken;
+        let accessToken
 
         if (res.accessToken.indexOf("Bearer") === 0) {
-          accessToken = res.accessToken.split("Bearer ")[1];
+          accessToken = res.accessToken.split("Bearer ")[1]
         }
 
         let refreshToken = res.refreshToken;
         if (accessToken && refreshToken) {
-          setCookie("accessToken", accessToken, { expires: 300 });
-          setCookie("refreshToken", refreshToken);
+          setCookie("accessToken", accessToken, { expires: 300 })
+          setCookie("refreshToken", refreshToken)
         }
       } else {
         dispatch({
@@ -355,7 +350,7 @@ export type TUserActions =
           type: PATCH_USER_FAILED
         })
       }
-    })
+    }).catch((error) => console.log(`Error: ${error}`))
   }
 
   export const logout: AppThunk = (refreshToken) => (dispatch: AppDispatch) => {
@@ -372,7 +367,7 @@ export type TUserActions =
           type: LOGOUT_FAILED
         })
       }
-    })
+    }).catch((error) => console.log(`Error: ${error}`))
   }
 
   export const getUser: AppThunk = (accesToken) => (dispatch: AppDispatch) => {
@@ -391,7 +386,7 @@ export type TUserActions =
           type: GET_USER_FAILED
         })
       }
-    })
+    }).catch((error) => console.log(`Error: ${error}`))
   } 
 
   export const refreshAccessToken: AppThunk = (refreshToken) => (dispatch: AppDispatch) => {
@@ -417,7 +412,7 @@ export type TUserActions =
           type: REFRESH_TOKEN_FAILED
         })
       }
-    })
+    }).catch((error) => console.log(`Error: ${error}`))
   }
 
   export const login: AppThunk = ({ email, password }) => (dispatch: AppDispatch) => {
@@ -446,34 +441,5 @@ export type TUserActions =
           type: LOGIN_FAILED
         })
       }
-    })
+    }).catch((error) => console.log(`Error: ${error}`))
   }
-  
-  // resetPassword('sdfjnslkdfgn@mail.ru').then((res) => console.log(res))
-  
-  
-  
-  
-  // createUser('zhiglov.artem@yandex.ru', 'qwerty123', 'zhig1ov').then((res) => {
-  //   if (res && res.success) {
-  //     console.log('Code POST', res)
-  //   } else {
-  //     console.log('Code POST error')
-  //   }
-  // })
-  
-  // postResetPassword('zhiglov.artem@yandex.ru').then((res) => {
-  //   if (res && res.success) {
-  //     console.log(res)
-  //   } else {
-  //     console.log('error')
-  //   }
-  // })
-  
-  // postResetPasswordCode('qwerty1234', '6e6763f8-4a72-49f4-a95c-48b96d65e4c3').then((res) => {
-  //   if (res && res.success) {
-  //     console.log('Code POST', res)
-  //   } else {
-  //     console.log('Code POST error')
-  //   }
-  // })

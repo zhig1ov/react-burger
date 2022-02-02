@@ -12,14 +12,18 @@ import BurgerConstructorElement from '../burgerConstructorElement/burger-constru
 import { makeOrder } from '../../services/actions/index'
 import { useSelectorHook } from "../../services/hooks/hooks"
 import { TIngredients } from '../../utils/types'
+import { useHistory } from 'react-router-dom'
 
 
 const BurgerConstructor = () => {
+  const [ totalPrice, setTotalPrice ] = useState<number>(0)
   const dispatch = useDispatchHook()
   const constructorElements = useSelectorHook(state => state.burger.constructorElements)
   const orderNumber = useSelectorHook(state => state.burger.orderNumber)
   const bun = useSelectorHook(state => state.burger.bun)
-  const [ totalPrice, setTotalPrice ] = useState<number>(0)
+  const { name } = useSelectorHook((state) => state.user)
+  const history = useHistory()
+
 
   useEffect(() => {
     if(bun) {
@@ -44,10 +48,15 @@ const BurgerConstructor = () => {
 
 
     const handleOpen = () => {
-      dispatch(makeOrder(elementsId))
-      dispatch({
-        type: CLEAR_CONSTRUCTOR_INGREDIENTS
-      })
+      if (!name) {
+        history.replace('/login')
+
+      } else {
+        dispatch(makeOrder(elementsId))
+        dispatch({
+          type: CLEAR_CONSTRUCTOR_INGREDIENTS
+        })
+      }
     }
 
     const [, dropTarget] = useDrop({

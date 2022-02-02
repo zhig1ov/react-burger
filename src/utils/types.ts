@@ -13,3 +13,10 @@ export type TIngredients = {
   __v: number,
   uuid?: number
 }
+
+export type TLocationTemplate = {
+  modalViewLocation?: any;
+  from: {
+    pathname: string;
+  };
+}

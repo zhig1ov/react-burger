@@ -1,6 +1,6 @@
 import React, { useState, SyntheticEvent, FormEvent, FC } from "react"
 import profileFormStyles from './profileForm.module.css'
-import { Input, EmailInput, Button } from "@ya.praktikum/react-developer-burger-ui-components"
+import { Input, Button } from "@ya.praktikum/react-developer-burger-ui-components"
 import { useDispatchHook, useSelectorHook } from '../../services/hooks/hooks'
 import { updateUser } from '../../services/actions/user'
 
@@ -29,8 +29,8 @@ export const ProfileForm: FC =  () => {
 
   const resetForm = () => {
     setValues({
-      name: '',
-      email: '',
+      name: name,
+      email: email,
       password: ''
     })
     setDisabled({
@@ -53,7 +53,9 @@ export const ProfileForm: FC =  () => {
     if (values.name && values.name !== name) data.name = values.name
     if (values.email && values.email !== email) data.email = values.email
     if (values.password) data.password = values.password
+    console.log(accessToken)
     if(accessToken) {
+
       console.log({ email: data.email, password: data.password, accessToken: accessToken, name: data.name })
       dispatch(updateUser({ email: data.email, password: data.password, accessToken: accessToken, name: data.name }))
     }

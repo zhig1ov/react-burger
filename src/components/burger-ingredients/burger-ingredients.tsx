@@ -8,13 +8,14 @@ import Modal from '../modal/modal'
 import IngredientDeatils from '../ingredient-details/ingredient-details'
 import { useSelectorHook } from "../../services/hooks/hooks"
 import { TIngredients } from '../../utils/types'
+import { useHistory } from 'react-router-dom'
 
 
 const BurgerIngredients = () => {
   const ingredients = useSelectorHook(state => state.burger.ingredients)
   const dispatch = useDispatchHook()
-
   const [current, setCurrent] = useState('buns')
+  const history = useHistory()
 
   const bunTab = useRef<HTMLDivElement | null>(null)
   const sauceTab = useRef<HTMLDivElement | null>(null)
@@ -40,6 +41,7 @@ const BurgerIngredients = () => {
     dispatch({
       type: REMOVE_CURRENT_INGREDIENT
     })
+    history.goBack()
   }
 
   const currentModalIngredient = useSelectorHook(state => state.burger.currentIngredient)
