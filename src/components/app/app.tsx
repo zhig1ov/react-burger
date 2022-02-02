@@ -16,7 +16,7 @@ const App = () => {
   useEffect(() => {
     dispatch(getIngredients())
     history.push(location.pathname)
-  }, [dispatch, history, location])
+  }, [dispatch, history])
   
   return (
     <div className={appStyle.app}>

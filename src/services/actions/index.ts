@@ -182,8 +182,6 @@ export const getIngredients : AppThunk = () => (dispatch: AppDispatch) => {
   }
 
 
-
-
 const downloadData = async () => {
   return await fetch(`${apiLink}/ingredients`).then(_checkResponse)
 }
