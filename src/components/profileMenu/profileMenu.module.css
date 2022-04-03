@@ -25,17 +25,3 @@
 .text {
   align-self: flex-start;
 }
-
-.navigation {
-  display: flex;
-  flex-direction: column;
-}
-.link {
-  height: 64px;
-  text-decoration: none;
-  line-height: 64px;
-  color: var(--text-inactive-color)
-}
-.activeLink {
-  color: red
-}

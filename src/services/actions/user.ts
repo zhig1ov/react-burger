@@ -1,7 +1,7 @@
 import { AppThunk, AppDispatch } from '../../index'
 import { setCookie } from '../../utils/utils'
 import { _checkResponse } from './index'
-import { apiLink, authLink } from '../../utils/constants'
+import { baseUrl } from '../../utils/constants'
 
 export const REGISTER_REQUEST: 'REGISTER_REQUEST' = 'REGISTER_REQUEST'
 export const REGISTER_SUCCESS: 'REGISTER_SUCCESS' = 'REGISTER_SUCCESS'
@@ -166,7 +166,7 @@ export type TUserActions =
   | IRefreshTokenFailed;
 
   export const postResetPassword = async(email: string) => {
-    return await fetch(`${apiLink}/password-reset`, {
+    return await fetch(`${baseUrl}/password-reset`, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -179,7 +179,7 @@ export type TUserActions =
   }
   
   export const postResetPasswordCode = async(password: string, code: string) => {
-    return await fetch(`${apiLink}/password-reset/reset`, {
+    return await fetch(`${baseUrl}/password-reset/reset`, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -193,7 +193,7 @@ export type TUserActions =
   }
   
   export const postCreateUser = async (email: string, password: string, name: string) => {
-    return await fetch(`${authLink}/register`, {
+    return await fetch(`${baseUrl}/auth/register`, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -208,7 +208,7 @@ export type TUserActions =
   }
 
   export const postUpdateUser = async (name: string, email: string, accessToken: string) => {
-    return await fetch(`${authLink}/user`, {
+    return await fetch(`${baseUrl}/auth/user`, {
       method: "PATCH",
       mode: "cors",
       headers: {
@@ -225,7 +225,7 @@ export type TUserActions =
   }
 
   const postLogout = async (refreshToken: string) => {
-    return await fetch(`${authLink}/logout`, {
+    return await fetch(`${baseUrl}/auth/logout`, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -236,7 +236,7 @@ export type TUserActions =
   }
 
   const postGetUser = async (accessToken: string) => {
-    return await fetch(`${authLink}/user`,{
+    return await fetch(`${baseUrl}/auth/user`,{
       method: "GET",
       mode: "cors",
       headers: {
@@ -247,7 +247,7 @@ export type TUserActions =
   }
 
   const postRefreshToken = async (refreshToken: string) => {
-    return await fetch(`${authLink}/token`, {
+    return await fetch(`${baseUrl}/auth/token`, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -258,7 +258,7 @@ export type TUserActions =
   }
 
   const postLoginData = async (email: string, password: string) => {
-    return await fetch(`${authLink}/login`, {
+    return await fetch(`${baseUrl}/auth/login`, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -321,7 +321,7 @@ export type TUserActions =
           accessToken = res.accessToken.split("Bearer ")[1]
         }
 
-        let refreshToken = res.refreshToken;
+        let refreshToken = res.refreshToken
         if (accessToken && refreshToken) {
           setCookie("accessToken", accessToken, { expires: 300 })
           setCookie("refreshToken", refreshToken)
@@ -389,6 +389,13 @@ export type TUserActions =
     }).catch((error) => console.log(`Error: ${error}`))
   } 
 
+  export function getCookie(name: string) {
+    const matches = document.cookie.match(
+      new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)')
+    );
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+  }
+
   export const refreshAccessToken: AppThunk = (refreshToken) => (dispatch: AppDispatch) => {
     dispatch({
       type: REFRESH_TOKEN_REQUEST
@@ -399,14 +406,24 @@ export type TUserActions =
           type: REFRESH_TOKEN_SUCCESS
         })
         let accessToken 
+        console.log('AccessToken 2:', accessToken)
         if (res.accessToken.indexOf('Bearer') === 0) {
           accessToken = res.accessToken.split('Bearer ')[1]
+          console.log('AccessToken 2:', accessToken)
+
         }
         let refreshToken = res.refreshToken
+        console.log('refreshAccessToken 1:', refreshToken)
         if (accessToken && refreshToken) {
+          console.log('refreshAccessToken 2:', refreshToken)
+
           setCookie('accessToken', accessToken, { expires: 1200 })
           setCookie('refreshToken', refreshToken)
         }
+        // accessToken = getCookie('accessToken')
+        // if (accessToken) {
+        //   getUser(accessToken)
+        // }
       } else {
         dispatch({
           type: REFRESH_TOKEN_FAILED
@@ -443,3 +460,50 @@ export type TUserActions =
       }
     }).catch((error) => console.log(`Error: ${error}`))
   }
+
+
+  ////////////////////////////////////////////////
+
+  export const dispatchGetUserRequest = (
+    accessToken: string,
+    dispatch: AppDispatch
+  ) => {
+    dispatch({
+      type: LOGIN_REQUEST
+    });
+    getUserRequest(accessToken)
+      .then((res) => {
+        dispatch({
+          type: LOGIN_SUCCESS,
+          email: res.user.email,
+          name: res.user.name
+        });
+        // dispatch(setUser(res.user));
+      })
+      .catch((error: any) => console.log(`Error: ${error}`))
+  };
+
+
+  // export const submitServerRequest = (): ISubmitServerRequest => ({
+  //   type: SUBMIT_SERVER_REQUEST,
+  // });
+
+  export const getUserRequest = async (accessToken: string) => {
+    const res = await fetch(`${baseUrl}/auth/user`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+    return _checkResponse(res);
+  };
+
+  // export const submitGetUserSuccess = (): ISubmitGetUserSuccess => ({
+//   type: SUBMIT_GET_USER_SUCCESS,
+// });
+
+// export const setUser = (user: TUser): ISetUser => ({
+//   type: SET_USER,
+//   user,
+// });

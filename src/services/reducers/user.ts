@@ -23,6 +23,7 @@ import {
   REFRESH_TOKEN_REQUEST,
   REFRESH_TOKEN_SUCCESS,
   REFRESH_TOKEN_FAILED,
+
   TUserActions } from '../actions/user'
 
   type TUserInitialState = {
@@ -60,6 +61,8 @@ import {
     refreshTokenRequest: boolean
     refreshTokenSuccess: boolean
     refreshTokenFailed: boolean
+
+    passwordReset: boolean
   }
 
   const userInitialState = {
@@ -96,7 +99,9 @@ import {
 
     refreshTokenRequest: false,
     refreshTokenSuccess: false,
-    refreshTokenFailed: false
+    refreshTokenFailed: false,
+
+    passwordReset: false
   }
 
   export const userReducer = (state = userInitialState, action: TUserActions): TUserInitialState => {
@@ -224,7 +229,8 @@ import {
           ...state,
           resetPasswordRequest: false,
           resetPasswordSuccess: true,
-          resetPasswordFailed: false
+          resetPasswordFailed: false,
+          passwordReset: true
         }
       }
       case RESET_PASSWORD_FAILED: {
