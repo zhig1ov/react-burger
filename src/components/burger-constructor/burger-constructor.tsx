@@ -5,11 +5,11 @@ import OrderDetails from '../order-details/order-details'
 import Modal from '../modal/modal'
 import { useDrop } from 'react-dnd'
 import { useDispatchHook } from '../../services/hooks/hooks'
-import { ADD_BUN, ADD_INGREDIENT, CLEAR_CONSTRUCTOR_INGREDIENTS, CLEAR_ORDER_MODAL, SORT_CONSTRUCTOR_INGREDIENTS } from '../../services/actions/index'
+import { ADD_BUN, ADD_INGREDIENT, CLEAR_CONSTRUCTOR_INGREDIENTS, CLEAR_ORDER_MODAL, SORT_CONSTRUCTOR_INGREDIENTS } from '../../services/actions/index1'
 import update from 'immutability-helper'
 import { v4 as uuidv4 } from 'uuid';
 import BurgerConstructorElement from '../burgerConstructorElement/burger-constructor-element'
-import { makeOrder } from '../../services/actions/index'
+import { makeOrder } from '../../services/actions/index1'
 import { useSelectorHook } from "../../services/hooks/hooks"
 import { TIngredients } from '../../utils/types'
 import { useHistory } from 'react-router-dom'

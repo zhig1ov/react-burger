@@ -1,8 +1,15 @@
-import { combineReducers } from "redux"
-import { burgerReducer } from './burger'
-import { userReducer } from "./user"
+import cartReducer from './cart/cartSlice';
+import apiReducer from './api/apiSlice';
+import contentReducer from './content/contentSlice';
+import userReducer from './user/userSlice';
+import formReducer from './form/formSlice';
 
-export const rootReducer = combineReducers({
-  burger: burgerReducer,
-  user: userReducer
-})
+const reducer = {
+  cart: cartReducer,
+  api: apiReducer,
+  content: contentReducer,
+  user: userReducer,
+  form: formReducer,
+};
+
+export default reducer;

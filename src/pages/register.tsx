@@ -1,79 +1,79 @@
-import React, { useState, ChangeEvent, useEffect } from "react"
-import { AuthForm } from '../components/auth-form/auth-form'
-import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components'
-import { Link, useHistory, Redirect, useLocation } from 'react-router-dom'
-import { useDispatchHook, useSelectorHook } from "../services/hooks/hooks"
-import { createUser } from "../services/actions/user"
-import { TLocationTemplate } from "../utils/types"
+import { useState, FC, SyntheticEvent } from 'react';
+import { Link, Redirect, useLocation } from 'react-router-dom';
+import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { setRegisterFormValue } from '../services/reducers/form/formSlice';
+import { register } from '../services/actions/auth';
+import { AuthForm } from '../components/auth-form/auth-form';
+import { TLocationTemplate } from '../types';
+import { useAppDispatch, useAppSelector } from '../hooks';
 
+export const RegisterPage: FC = () => {
+  const [passwordShown, setPasswordShown] = useState<boolean>(false);
+  const { name, email, password } = useAppSelector((state) => state.form.register);
+  const { loggedIn } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+  const location = useLocation<TLocationTemplate>();
 
-export const RegisterPage = () => {
-  const [nameValue, setNameValue] = useState('')
-  const [emailValue, setEmailValue] = useState('')
-  const [passwordValue, setPasswordValue] = useState('')
-  const user = useSelectorHook((state) => state.user)
-  const dispatch = useDispatchHook()
-  const history = useHistory()
-  const location = useLocation<TLocationTemplate>()
-
-  const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-    setNameValue(e.target.value)
+  if (loggedIn) {
+    const { from } = location.state || { from: { pathname: '/' } };
+    return (
+      <Redirect to={from} />
+    );
   }
 
-  const onChangeEmail = (e: ChangeEvent<HTMLInputElement>)=> {
-    setEmailValue(e.target.value)
-  }
+  const onFormSubmit = () => dispatch(register({ name, email, password }));
 
-  const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
-    setPasswordValue(e.target.value)
-  }
+  const onFormChange = (e: SyntheticEvent) => {
+    let target = e.target as HTMLInputElement;
+    const { name, value } = target;
+    dispatch(setRegisterFormValue({ key: name, value }));
+  };
 
-  const onFormSubmit = () => {
-    dispatch(createUser({ email: emailValue, password: passwordValue, name: nameValue}))
-  }
+  const LoginLink = () => (
+    <p className="text text_type_main-default text_color_inactive mt-20">
+      Уже зарегистрированы?&ensp;
+      <Link to="/login">Войти</Link>
+    </p>
+  );
 
-  useEffect(() => {
-    if (user.registerSuccess) {
-      user.registerSuccess = false
-      history.push('/')
-    }
-  }, [user, history])
-
-  if (user.name) {
-    const { from } = location.state || { from: { pathname: '/' } }
-    return <Redirect to={from} />
-  }
-  
   return (
-    <AuthForm title={'Регистрация'} onSubmit={onFormSubmit}>
+    <AuthForm title="Регистрация" onSubmit={onFormSubmit}>
       <Input
-        type={'text'}
-        placeholder={'Имя'}
-        onChange={onChangeName}
-        value={nameValue}
-        name={'name'}
+        type="text"
+        placeholder="Имя"
+        onChange={onFormChange}
+        value={name}
+        name="name"
+        icon="EditIcon"
         error={false}
-        errorText={undefined}
-        size={'default'}
+        errorText=""
       />
       <Input
-        type={'text'}
-        placeholder={'E-mail'}
-        onChange={onChangeEmail}
-        value={emailValue}
-        name={'email'}
+        type="text"
+        placeholder="E-mail"
+        onChange={onFormChange}
+        value={email}
+        name="email"
+        icon="EditIcon"
         error={false}
-        errorText={undefined}
-        size={'default'}
+        errorText=""
       />
-      <PasswordInput onChange={onChangePassword} value={passwordValue} name={'password'} />
-      <Button type="primary" size="medium">
+      <Input
+        type={passwordShown ? 'text' : 'password'}
+        placeholder="Пароль"
+        onChange={onFormChange}
+        icon={passwordShown ? 'HideIcon' : 'ShowIcon'}
+        value={password}
+        name="password"
+        error={false}
+        onIconClick={() => { setPasswordShown(!passwordShown); }}
+        errorText="Ошибка"
+        size="default"
+      />
+      <Button type="primary" size="large">
         Зарегистрироваться
       </Button>
-      <p className={`text text_type_main-default text_color_inactive mt-20`}>
-        Уже зарегистрированы?&ensp;
-        <Link to={'/login'} className='text text_color_accent'>Войти</Link>
-      </p>
+      <LoginLink />
     </AuthForm>
-  )
-}
+  );
+};

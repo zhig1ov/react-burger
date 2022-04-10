@@ -2,7 +2,7 @@ import React, { useRef, FC } from 'react'
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useDrop, useDrag } from 'react-dnd'
 import { useDispatchHook } from '../../services/hooks/hooks'
-import { REMOVE_INGREDIENT } from '../../services/actions'
+import { REMOVE_INGREDIENT } from '../../services/actions/index1'
 import { TIngredients } from '../../utils/types'
 
 interface IBurgerConstructorElement {

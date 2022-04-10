@@ -2,7 +2,8 @@ import React, { useEffect } from 'react'
 import AppHeader from '../app-header/app-header'
 import appStyle from './app.module.css'
 import { useDispatchHook } from '../../services/hooks/hooks'
-import { getIngredients } from '../../services/actions/index'
+import { getIngredients } from '../../services/actions/index1'
+import { dispatchGetUser, getUser } from '../../services/actions/user1'
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom'
 import { ForgotPasswordPage, LoginPage, RegisterPage, ResetPasswordPage, HomePage, ProfilePage, IngredientDetailsPage, NotFoundPage } from '../../pages'
 import { ProtectedRoute } from '../protected-route'
@@ -19,6 +20,17 @@ const App = () => {
     dispatch(getIngredients())
     history.push(location.pathname)
   }, [dispatch, history])
+
+  // useEffect(() => {
+  //   const accessToken = document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")
+  //   if (accessToken) {
+  //     dispatch(getUser())
+  //   }
+  // }, [dispatch])
+
+  // useEffect(() => {
+  //   dispatch(dispatchGetUser())
+  // }, [dispatch])
   
   return (
     <div className={appStyle.app}>
@@ -31,7 +43,7 @@ const App = () => {
           <Route path='/register' exact render={() => <RegisterPage />} />
           <Route path='/forgot-password' exact render={() => <ForgotPasswordPage />} />
           <ProtectedUnauthorizedRouteWithReset path='/reset-password'  exact children={ <ResetPasswordPage />} />
-          <Route path='/orders' exact render={() => <div>orders</div>} />
+          <ProtectedRoute path='/orders' exact render={() => <div>orders</div>} />
           <ProtectedRoute path='/profile' exact children={<ProfilePage />} />
           <Route path="*" render={() => <NotFoundPage />} />
         </Switch>

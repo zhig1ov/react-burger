@@ -1,75 +1,75 @@
-import React, { useState, ChangeEvent, useEffect } from "react";
-// import ResetPasswordStyle from './reset-password.module.css'
-import {  Button, Input } from '@ya.praktikum/react-developer-burger-ui-components'
-import { AuthForm } from "../components/auth-form/auth-form"
-import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
-import { useDispatchHook, useSelectorHook } from "../services/hooks/hooks";
-import { resetPasswordCode } from '../services/actions/user'
-import { TLocationTemplate } from "../utils/types";
+import { useEffect, useState, FC, SyntheticEvent } from 'react';
+import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import {
+  Link, Redirect, useLocation, useHistory,
+} from 'react-router-dom';
+import { setResetFormValue } from '../services/reducers/form/formSlice';
+import { confirmPasswordReset } from '../services/actions/auth';
+import { AuthForm } from '../components/auth-form/auth-form';
+import { TLocationTemplate } from '../types';
+import { useAppDispatch, useAppSelector } from '../hooks';
 
-export const ResetPasswordPage = () => {
-  const [passwordValue, setPasswordValue] = useState('')
-  const [codeValue, setCodeValue] = useState('')
-  const [passwordShow, setPasswordShow] = useState(false)
-  const user = useSelectorHook((state) => state.user)
-  const dispatch = useDispatchHook()
-  const history = useHistory()
-  const location = useLocation<TLocationTemplate>()
-  const { from } = location.state || { from: { pathname: '/' } }
-
-  const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
-    setPasswordValue(e.target.value)
-  }
-
-  const onChangeCode = (e: ChangeEvent<HTMLInputElement>) => {
-    setCodeValue(e.target.value)
-  }
-
-  const onFormSubmit = () => {
-    dispatch(resetPasswordCode({ password: passwordValue, code: codeValue }))
-    
-  }
+export const ResetPasswordPage: FC = () => {
+  const [passwordShown, setPasswordShown] = useState(false);
+  const { loggedIn, passwordReset, passwordResetSuccess } = useAppSelector((state)=> state.user);
+  const { password, code } = useAppSelector((state) => state.form.reset);
+  const dispatch = useAppDispatch();
+  const location = useLocation<TLocationTemplate>();
+  const history = useHistory();
+  const { from } = location.state || { from: { pathname: '/' } };
 
   useEffect(() => {
-    if (user.resetPasswordCodeSuccess) {
-      user.resetPasswordCodeSuccess = false
-      history.push('/')
-    }
-  }, [user, history])
+    if (passwordResetSuccess) history.replace({ pathname: '/login' });
+  }, [passwordResetSuccess, history]);
 
-  if (user.name) {
-    return <Redirect to={from} />
+  if (loggedIn) {
+    return (
+      <Redirect to={from} />
+    );
   }
+  if (!passwordReset && !loggedIn) return (<Redirect to="/forgot-password" />);
 
+  const onFormSubmit = () => dispatch(confirmPasswordReset({ password, token: code }));
+
+  const onFormChange = (e: SyntheticEvent) => {
+    let target = e.target as HTMLInputElement;
+    const { name, value } = target;
+    dispatch(setResetFormValue({ key: name, value }));
+  };
+
+  const LoginLink = () => (
+    <p className="text text_type_main-default text_color_inactive mt-20">
+      Вспомнили пароль?&ensp;
+      <Link to="/login">Войти</Link>
+    </p>
+  );
 
   return (
-    <AuthForm title={'Восстановление пароля'} onSubmit={onFormSubmit} >
+    <AuthForm title="Восстановление пароля" onSubmit={onFormSubmit}>
       <Input
-          type={passwordShow ? 'text' : 'password'}
-          value={passwordValue}
-          name={"password"}
-          placeholder="Введите новый пароль"
-          size="default"
-          onChange={onChangePassword}
-          icon={passwordShow ? 'ShowIcon' : 'HideIcon'}
-          onIconClick={() => setPasswordShow(!passwordShow)}
-        />
-         <Input
-          type={'text'}
-          placeholder={'Введите код из письма'}
-          onChange={onChangeCode}
-          icon="EditIcon"
-          value={codeValue}
-          name={'code'}
-          size={'default'}
-        />
-        <Button type="primary" size="medium">
-          Восстановить
-        </Button>
-          <p className={`text text_type_main-default text_color_inactive mt-20`}>
-            Вспомнили пароль?&ensp;
-            <Link to={'/login'} className='text text_color_accent'>Войти</Link>
-          </p>
-      </AuthForm>
-  )
-}
+        type={passwordShown ? 'text' : 'password'}
+        placeholder="Введите новый пароль"
+        onChange={onFormChange}
+        icon={passwordShown ? 'HideIcon' : 'ShowIcon'}
+        value={password}
+        name="password"
+        error={false}
+        onIconClick={() => { setPasswordShown(!passwordShown); }}
+        errorText="Ошибка"
+        size="default"
+      />
+      <Input
+        type="text"
+        placeholder="Введите код из письма"
+        onChange={onFormChange}
+        value={code}
+        name="code"
+        icon="EditIcon"
+        error={false}
+        errorText=""
+      />
+      <Button type="primary" size="large">Сохранить</Button>
+      <LoginLink />
+    </AuthForm>
+  );
+};

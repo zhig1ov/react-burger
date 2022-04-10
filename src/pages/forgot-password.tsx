@@ -1,69 +1,63 @@
-import React, { useState, ChangeEvent, useEffect } from "react";
-import { AuthForm } from '../components/auth-form/auth-form'
-import { Link, useHistory, Redirect, useLocation } from 'react-router-dom'
-import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useDispatchHook, useSelectorHook } from '../services/hooks/hooks'
-import { resetPassword } from '../services/actions/user'
-import { TLocationTemplate } from "../utils/types";
+import { FC, SyntheticEvent } from 'react';
+import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Link, useLocation, Redirect } from 'react-router-dom';
+import { setForgotFormValue } from '../services/reducers/form/formSlice';
+import { resetPassword } from '../services/actions/auth';
+import { AuthForm } from '../components/auth-form/auth-form';
+import { TLocationTemplate } from '../types';
+import { useAppDispatch, useAppSelector } from '../hooks';
 
-export const ForgotPasswordPage = () => {
-  const [emailValue, setEmailValue] = useState('')
-  const dispatch = useDispatchHook()
-  const history = useHistory()
-  const user = useSelectorHook(state => state.user)
-  const location = useLocation<TLocationTemplate>()
-  const { from } = location.state || { from: { pathname: '/' } }
-
-  const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmailValue(e.target.value)
-  }
+export const ForgotPasswordPage: FC = () => {
+  const { email } = useAppSelector((state) => state.form.forgot);
+  const { passwordReset } = useAppSelector((state) => state.user);
+  const { loggedIn } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+  const location = useLocation<TLocationTemplate>();
   
-  const onFormSubmit = () => {
-    dispatch(resetPassword({ email: emailValue}))
-  }
+  const { from } = location.state || { from: { pathname: '/' } };
 
-  // useEffect(() => {
-  //   if (user.resetPasswordSuccess) {
-  //     // user.resetPasswordSuccess = false
-  //     console.log('Сброс')
-  //     history.push('/reset-password')
-  //   }
-  // }, [history, user])
+  const onFormSubmit = () => dispatch(resetPassword({ email }));
 
-  if (user.resetPasswordSuccess) {
-    user.passwordReset = true
+  if (passwordReset) {
     return (
       <Redirect to={{
         pathname: '/reset-password',
-        
+        state: { from },
       }}
       />
     );
-  } 
+  }
 
-  // if (user.name) {
-  //   return <Redirect to={from} />
-  // }
+  if (loggedIn) return (<Redirect to={from} />);
+
+  const onFormChange = (e: SyntheticEvent) => {
+    let target = e.target as HTMLInputElement;
+    const { name, value } = target;
+    dispatch(setForgotFormValue({ key: name, value }));
+  };
+  const LoginLink = () => (
+    <p className="text text_type_main-default text_color_inactive mt-20">
+      Вспомнили пароль?&ensp;
+      <Link to="/login">Войти</Link>
+    </p>
+  );
 
   return (
-    <AuthForm title={'Восстановление пароля'} onSubmit={onFormSubmit}>
-        <Input
-          type={'text'}
-          placeholder={'Укажите e-mail'}
-          onChange={onChangeEmail}
-          value={emailValue}
-          name={'email'}
-          error={false}
-          errorText={''}
-          size={'default'}
-        />
-        <Button type="primary" size="medium">
-          Восстановить
-        </Button>
-        <p className={`text text_type_main-default text_color_inactive mt-20`}>
-          Вспомнили пароль?&ensp;
-            <Link to={'/login'} className='text text_color_accent'>Войти</Link>
-        </p>
-      </AuthForm>
-  )
-}
+    <AuthForm title="Восстановление пароля" onSubmit={onFormSubmit} >
+      <Input
+        type="text"
+        placeholder="Укажите e-mail"
+        onChange={onFormChange}
+        value={email}
+        name="email"
+        icon="EditIcon"
+        error={false}
+        errorText=""
+      />
+      <Button type="primary" size="large">
+        Восстановить
+      </Button>
+      <LoginLink />
+    </AuthForm>
+  );
+};
