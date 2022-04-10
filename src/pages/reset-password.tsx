@@ -27,18 +27,20 @@ export const ResetPasswordPage = () => {
 
   const onFormSubmit = () => {
     dispatch(resetPasswordCode({ password: passwordValue, code: codeValue }))
+    
   }
 
   useEffect(() => {
     if (user.resetPasswordCodeSuccess) {
       user.resetPasswordCodeSuccess = false
-      history.push('/login')
+      history.push('/')
     }
   }, [user, history])
 
   if (user.name) {
     return <Redirect to={from} />
   }
+
 
   return (
     <AuthForm title={'Восстановление пароля'} onSubmit={onFormSubmit} >

@@ -53,7 +53,7 @@ export const ProfileForm: FC =  () => {
     if (values.name && values.name !== name) data.name = values.name
     if (values.email && values.email !== email) data.email = values.email
     if (values.password) data.password = values.password
-    console.log(accessToken)
+
     if(accessToken) {
 
       console.log({ email: data.email, password: data.password, accessToken: accessToken, name: data.name })

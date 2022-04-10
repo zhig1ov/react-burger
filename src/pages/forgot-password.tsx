@@ -21,17 +21,29 @@ export const ForgotPasswordPage = () => {
   const onFormSubmit = () => {
     dispatch(resetPassword({ email: emailValue}))
   }
-  
-  useEffect(() => {
-    if (user.resetPasswordSuccess) {
-      user.resetPasswordSuccess = false
-      history.push('/reset-password')
-    }
-  }, [history, user])
-  
-  if (user.name) {
-    return <Redirect to={from} />
-  }
+
+  // useEffect(() => {
+  //   if (user.resetPasswordSuccess) {
+  //     // user.resetPasswordSuccess = false
+  //     console.log('Сброс')
+  //     history.push('/reset-password')
+  //   }
+  // }, [history, user])
+
+  if (user.resetPasswordSuccess) {
+    user.passwordReset = true
+    return (
+      <Redirect to={{
+        pathname: '/reset-password',
+        
+      }}
+      />
+    );
+  } 
+
+  // if (user.name) {
+  //   return <Redirect to={from} />
+  // }
 
   return (
     <AuthForm title={'Восстановление пароля'} onSubmit={onFormSubmit}>

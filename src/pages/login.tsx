@@ -15,6 +15,15 @@ export const LoginPage = () => {
   const history = useHistory()
   const location = useLocation<TLocationTemplate>()
 
+    // Если есть нужный токен в куках, то при заходе на страницу фетчится юзер
+
+    // useEffect(() => {
+    //   if (!user) dispatch(dispatchGetUser());
+    //   return () => {
+    //     dispatch(removeServerError());
+    //   };
+    // }, []);
+
 
   const onChangeEmail = (e: ChangeEvent<HTMLInputElement>)=> {
     setEmailValue(e.target.value)

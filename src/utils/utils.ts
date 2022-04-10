@@ -1,7 +1,8 @@
-
-
 export function setCookie(name: string, value: string, props?: any) {
-  props = props || {};
+  props = {
+    path: '/',
+    ...props
+  }
   let exp = props.expires;
   
   if (typeof exp == 'number' && exp) {

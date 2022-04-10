@@ -7,6 +7,6 @@ export const ProtectedRoute: FC<RouteProps> = ({path, children, ...rest}) => {
 
   return (
     <Route path={path} {...rest} render={({ location }) => name ? (children) : (
-      <Redirect to={{pathname: './login', state: { from: location}}} exact={true} />)} />
+      <Redirect to={{pathname: './login', state: { from: location}}} />)} />
   )
 }

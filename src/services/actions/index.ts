@@ -1,4 +1,4 @@
-import {apiLink} from '../../utils/constants'
+import { baseUrl } from '../../utils/constants'
 import { AppDispatch, AppThunk } from "../../index"
 import { TIngredients } from '../../utils/types'
 
@@ -183,7 +183,7 @@ export const getIngredients : AppThunk = () => (dispatch: AppDispatch) => {
 
 
 const downloadData = async () => {
-  return await fetch(`${apiLink}/ingredients`).then(_checkResponse)
+  return await fetch(`${baseUrl}/ingredients`).then(_checkResponse)
 }
 
 export function _checkResponse (res: Response) {
@@ -209,7 +209,7 @@ export function _checkResponse (res: Response) {
   }
   
   export const makeData = async(ingredientsId: string[]) => {
-    return await fetch(`${apiLink}/orders`, {
+    return await fetch(`${baseUrl}/orders`, {
       method: 'POST',
       mode: 'cors',
       headers: {
