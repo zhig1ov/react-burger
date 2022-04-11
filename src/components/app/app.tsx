@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import AppHeader from '../app-header/app-header'
 import appStyle from './app.module.css'
 import { useDispatchHook } from '../../services/hooks/hooks'
-import { getIngredients } from '../../services/actions/index'
+import { getIngredients } from '../../services/thunks/burger'
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom'
 import { ForgotPasswordPage, LoginPage, RegisterPage, ResetPasswordPage, HomePage, ProfilePage, IngredientDetailsPage, NotFoundPage } from '../../pages'
 import { ProtectedRoute } from '../protected-route'
@@ -13,7 +13,6 @@ const App = () => {
   const location: any = useLocation()
   const background = location.state && location.state.background
   const history = useHistory()
-
 
   useEffect(() => {
     dispatch(getIngredients())
@@ -32,7 +31,9 @@ const App = () => {
           <Route path='/forgot-password' exact render={() => <ForgotPasswordPage />} />
           <ProtectedUnauthorizedRouteWithReset path='/reset-password'  exact children={ <ResetPasswordPage />} />
           <Route path='/orders' exact render={() => <div>orders</div>} />
-          <ProtectedRoute path='/profile' exact children={<ProfilePage />} />
+          <ProtectedRoute path="/profile">
+            <ProfilePage />
+          </ProtectedRoute>
           <Route path="*" render={() => <NotFoundPage />} />
         </Switch>
       </main>

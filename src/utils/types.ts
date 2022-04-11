@@ -20,3 +20,12 @@ export type TLocationTemplate = {
     pathname: string;
   };
 }
+
+export type TRegisterUserData = {
+  name: string;
+  email: string;
+}
+
+export type TDict<T> = {
+  [name: string]: T;
+};

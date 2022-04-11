@@ -21,7 +21,7 @@ const AppHeader = () => {
         </NavLink>
       </div>
       <Logo />
-      <NavLink to={name ? "/profile" : "/login"} exact={true} className={`${headerStyle.item} text text_type_main-default text_color_inactive pl-2`} activeClassName='text_color_primary'>
+      <NavLink to={"/profile"} exact={true} className={`${headerStyle.item} text text_type_main-default text_color_inactive pl-2`} activeClassName='text_color_primary'>
         <ProfileIcon type="primary" />
         <p>Личный кабинет</p>
       </NavLink>

@@ -1,12 +1,35 @@
 import React, { FC } from 'react'
-import { Route, RouteProps, Redirect } from 'react-router-dom'
-import { useSelectorHook } from '../services/hooks/hooks'
+import { Route, Redirect } from 'react-router-dom'
+import { useDispatchHook } from '../services/hooks/hooks'
+import { updateToken } from '../services/thunks/user'
 
-export const ProtectedRoute: FC<RouteProps> = ({path, children, ...rest}) => {
-  const { name } = useSelectorHook((state) => state.user)
+type TProtectedRouteProps = {
+  path: string;
+  exact?: boolean;
+}
+
+export const ProtectedRoute: FC<TProtectedRouteProps> = ({ children, ...rest }) => {
+  const dispatch = useDispatchHook()
+  const accessToken: boolean = document.cookie.indexOf('accessToken=') !== -1
+  const refreshToken: boolean = localStorage['refreshToken'] !== undefined
+
+  if(!accessToken && refreshToken) {
+    dispatch(updateToken())
+  }
 
   return (
-    <Route path={path} {...rest} render={({ location }) => name ? (children) : (
-      <Redirect to={{pathname: './login', state: { from: location}}} />)} />
-  )
+    <Route
+      {...rest}
+      render={({location}) => accessToken ? (
+        children 
+          ) : (
+            <Redirect to={{
+              pathname: '/login',
+              state: { from: location }
+            }
+          } />
+        )
+      }
+    />
+  );
 }

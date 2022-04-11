@@ -1,67 +1,47 @@
-import React, { useState, ChangeEvent, useEffect } from "react"
-// import loginStyles from './login.module.css'
+import React, { SyntheticEvent } from "react"
 import { AuthForm } from '../components/auth-form/auth-form'
 import { Link, NavLink, useHistory, Redirect, useLocation } from 'react-router-dom'
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useDispatchHook, useSelectorHook } from "../services/hooks/hooks"
-import { login } from "../services/actions/user"
-import { TLocationTemplate} from '../utils/types'
+import { dispatchData } from '../services/action-creators'
+import { loginUser } from '../services/thunks/user'
+import Preloader from '../components/preloader/preloader'
 
 export const LoginPage = () => {
-  const [emailValue, setEmailValue] = useState('')
-  const [passwordValue, setPasswordValue] = useState('')
-  const user = useSelectorHook((state) => state.user)
   const dispatch = useDispatchHook()
   const history = useHistory()
-  const location = useLocation<TLocationTemplate>()
-
-    // Если есть нужный токен в куках, то при заходе на страницу фетчится юзер
-
-    // useEffect(() => {
-    //   if (!user) dispatch(dispatchGetUser());
-    //   return () => {
-    //     dispatch(removeServerError());
-    //   };
-    // }, []);
-
-
-  const onChangeEmail = (e: ChangeEvent<HTMLInputElement>)=> {
-    setEmailValue(e.target.value)
-  }
-
-  const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
-    setPasswordValue(e.target.value)
-  }
+  const { state }: any  = history.location
+  const { user:{email, password}, loginRequest, logoutRequest } = useSelectorHook((store: any) => store.user)
+  const accessToken: boolean = document.cookie.indexOf('accessToken=') !== -1
 
   const onFormSubmit = () => {
-    dispatch(login({ email: emailValue, password: passwordValue }))
-  }
+    dispatch(loginUser({ email, password }))}
 
-  useEffect(() => {
-    if (user.loginSuccess) {
-      user.loginSuccess = false
-      history.push('/')
-    }
-  }, [user, history])
-
-  if (user.name) {
-    const { from } = location.state || { from: { pathname: '/' } }
-    return <Redirect to={from} />
+  const setValue = (e: SyntheticEvent) => {
+    dispatch(dispatchData(
+      (e.target as HTMLInputElement).name,
+      (e.target as HTMLInputElement).value
+    ))
   }
 
   return (
+    loginRequest || logoutRequest ? (
+      <Preloader /> 
+      ) : ( accessToken) ? (
+      <Redirect to={state?.from  || '/'} />
+      ) : (
     <AuthForm title={'Вход'} onSubmit={onFormSubmit}>
       <Input
         type={'text'}
         placeholder={'Укажите e-mail'}
-        onChange={onChangeEmail}
-        value={emailValue}
+        onChange={(e) => setValue(e)}
+        value={email}
         name={'email'}
         error={false}
         errorText={undefined}
         size={'default'}
       />
-      <PasswordInput onChange={onChangePassword} value={passwordValue} name={'password'} />
+      <PasswordInput onChange={(e) => setValue(e)} value={password} name={'password'} />
       <Button type="primary" size="medium">
         Войти
       </Button>
@@ -74,5 +54,6 @@ export const LoginPage = () => {
         <Link to={'/forgot-password'} className='text text_color_accent'>Восстановить пароль</Link>
       </p>
     </AuthForm>
+    )
   )
 }

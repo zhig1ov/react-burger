@@ -5,11 +5,11 @@ import OrderDetails from '../order-details/order-details'
 import Modal from '../modal/modal'
 import { useDrop } from 'react-dnd'
 import { useDispatchHook } from '../../services/hooks/hooks'
-import { ADD_BUN, ADD_INGREDIENT, CLEAR_CONSTRUCTOR_INGREDIENTS, CLEAR_ORDER_MODAL, SORT_CONSTRUCTOR_INGREDIENTS } from '../../services/actions/index'
+import { ADD_BUN, ADD_INGREDIENT, CLEAR_CONSTRUCTOR_INGREDIENTS, CLEAR_ORDER_MODAL, SORT_CONSTRUCTOR_INGREDIENTS } from '../../services/action-constants/burger'
 import update from 'immutability-helper'
 import { v4 as uuidv4 } from 'uuid';
 import BurgerConstructorElement from '../burgerConstructorElement/burger-constructor-element'
-import { makeOrder } from '../../services/actions/index'
+import { makeOrder } from '../../services/thunks/burger'
 import { useSelectorHook } from "../../services/hooks/hooks"
 import { TIngredients } from '../../utils/types'
 import { useHistory } from 'react-router-dom'
@@ -21,7 +21,7 @@ const BurgerConstructor = () => {
   const constructorElements = useSelectorHook(state => state.burger.constructorElements)
   const orderNumber = useSelectorHook(state => state.burger.orderNumber)
   const bun = useSelectorHook(state => state.burger.bun)
-  const { name } = useSelectorHook((state) => state.user)
+  const { user } = useSelectorHook((store) => store.user)
   const history = useHistory()
 
 
@@ -48,7 +48,7 @@ const BurgerConstructor = () => {
 
 
     const handleOpen = () => {
-      if (!name) {
+      if (!user) {
         history.replace('/login')
 
       } else {

@@ -1,75 +1,64 @@
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState, SyntheticEvent, FC } from "react";
 // import ResetPasswordStyle from './reset-password.module.css'
 import {  Button, Input } from '@ya.praktikum/react-developer-burger-ui-components'
 import { AuthForm } from "../components/auth-form/auth-form"
-import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
-import { useDispatchHook, useSelectorHook } from "../services/hooks/hooks";
-import { resetPasswordCode } from '../services/actions/user'
-import { TLocationTemplate } from "../utils/types";
+import { Link, Redirect } from 'react-router-dom'
+import { useDispatchHook, useSelectorHook } from "../services/hooks/hooks"
+import { dispatchData } from '../services/action-creators'
+import { getNewPassword } from '../services/thunks/user'
+import { Preloader } from '../components/preloader/preloader'
 
-export const ResetPasswordPage = () => {
-  const [passwordValue, setPasswordValue] = useState('')
-  const [codeValue, setCodeValue] = useState('')
+export const ResetPasswordPage: FC = () => {
   const [passwordShow, setPasswordShow] = useState(false)
-  const user = useSelectorHook((state) => state.user)
   const dispatch = useDispatchHook()
-  const history = useHistory()
-  const location = useLocation<TLocationTemplate>()
-  const { from } = location.state || { from: { pathname: '/' } }
-
-  const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
-    setPasswordValue(e.target.value)
-  }
-
-  const onChangeCode = (e: ChangeEvent<HTMLInputElement>) => {
-    setCodeValue(e.target.value)
-  }
+  const { user: {newPassword}, resetCode,newPasswordRequest} = useSelectorHook((store: any) => store.user)
+  const accessToken: boolean = document.cookie.indexOf('accessToken=') !== -1
 
   const onFormSubmit = () => {
-    dispatch(resetPasswordCode({ password: passwordValue, code: codeValue }))
-    
+    dispatch(getNewPassword('/password-reset/reset', newPassword, resetCode))
   }
 
-  useEffect(() => {
-    if (user.resetPasswordCodeSuccess) {
-      user.resetPasswordCodeSuccess = false
-      history.push('/')
-    }
-  }, [user, history])
-
-  if (user.name) {
-    return <Redirect to={from} />
+  const setValue = (e: SyntheticEvent) => {
+    dispatch(dispatchData(
+      (e.target as HTMLInputElement).name,
+      (e.target as HTMLInputElement).value
+    ))
   }
-
 
   return (
-    <AuthForm title={'Восстановление пароля'} onSubmit={onFormSubmit} >
-      <Input
+    newPasswordRequest ? (
+      <Preloader />
+      ) : ( accessToken || newPassword === 'changed' ) ? (
+      <Redirect to={'/'} />
+      ) : (
+      <AuthForm title={'Восстановление пароля'} onSubmit={onFormSubmit} >
+        <Input
           type={passwordShow ? 'text' : 'password'}
-          value={passwordValue}
-          name={"password"}
+          value={newPassword}
+          name={"newPassword"}
           placeholder="Введите новый пароль"
           size="default"
-          onChange={onChangePassword}
+          onChange={(e) => setValue(e)}
           icon={passwordShow ? 'ShowIcon' : 'HideIcon'}
           onIconClick={() => setPasswordShow(!passwordShow)}
         />
-         <Input
+        <Input
           type={'text'}
           placeholder={'Введите код из письма'}
-          onChange={onChangeCode}
+          onChange={(e) => setValue(e)}
           icon="EditIcon"
-          value={codeValue}
+          value={resetCode}
           name={'code'}
           size={'default'}
         />
         <Button type="primary" size="medium">
           Восстановить
         </Button>
-          <p className={`text text_type_main-default text_color_inactive mt-20`}>
-            Вспомнили пароль?&ensp;
-            <Link to={'/login'} className='text text_color_accent'>Войти</Link>
-          </p>
+        <p className={`text text_type_main-default text_color_inactive mt-20`}>
+          Вспомнили пароль?&ensp;
+          <Link to={'/login'} className='text text_color_accent'>Войти</Link>
+        </p>
       </AuthForm>
+    )
   )
 }

@@ -1,509 +1,166 @@
-import { AppThunk, AppDispatch } from '../../index'
-import { setCookie } from '../../utils/utils'
-import { _checkResponse } from './index'
-import { baseUrl } from '../../utils/constants'
+import { TRegisterUserData } from '../../utils/types'
+import {
+  SET_NAME, 
+  SET_EMAIL,
+  SET_LOGIN,
+  SET_PASSWORD,
+  SET_RESTORE_EMAIL,
+  REGISTER_REQUEST,
+  REGISTER_SUCCESS,
+  REGISTER_FAILED,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAILED,
+  GET_USER_REQUEST,
+  GET_USER_SUCCESS,
+  GET_USER_FAILED,
+  CANCEL_GET_USER_DATA,
+  RESET_PASSWORD_REQUEST,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAILED,
+  RESET_PASSWORD_CODE_REQUEST,
+  RESET_PASSWORD_CODE_SUCCESS,
+  RESET_PASSWORD_CODE_FAILED,
+  SET_NEW_PASSWORD,
+  SET_RESTORE_CODE,
+  REFRESH_TOKEN_REQUEST,
+  REFRESH_TOKEN_SUCCESS,
+  REFRESH_TOKEN_FAILED,
+  LOGOUT_REQUEST,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILED
+} from '../action-constants/user'
 
-export const REGISTER_REQUEST: 'REGISTER_REQUEST' = 'REGISTER_REQUEST'
-export const REGISTER_SUCCESS: 'REGISTER_SUCCESS' = 'REGISTER_SUCCESS'
-export const REGISTER_FAILED: 'REGISTER_FAILED' = 'REGISTER_FAILED'
-
-export const LOGIN_REQUEST: 'LOGIN_REQUEST' = 'LOGIN_REQUEST'
-export const LOGIN_SUCCESS: 'LOGIN_SUCCESS' = 'LOGIN_SUCCESS'
-export const LOGIN_FAILED: 'LOGIN_FAILED' = 'LOGIN_FAILED'
-
-export const LOGOUT_REQUEST: 'LOGOUT_REQUEST' = 'LOGOUT_REQUEST'
-export const LOGOUT_SUCCESS: 'LOGOUT_SUCCESS' = 'LOGOUT_SUCCESS'
-export const LOGOUT_FAILED: 'LOGOUT_FAILED' = 'LOGOUT_FAILED'
-
-export const GET_USER_REQUEST: 'GET_USER_REQUEST' = 'GET_USER_REQUEST'
-export const GET_USER_SUCCESS: 'GET_USER_SUCCESS' = 'GET_USER_SUCCESS'
-export const GET_USER_FAILED: 'GET_USER_FAILED' = 'GET_USER_FAILED'
-
-export const PATCH_USER_REQUEST: 'PATCH_USER_REQUEST' = 'PATCH_USER_REQUEST'
-export const PATCH_USER_SUCCESS: 'PATCH_USER_SUCCESS' = 'PATCH_USER_SUCCESS'
-export const PATCH_USER_FAILED: 'PATCH_USER_FAILED' = 'PATCH_USER_FAILED'
-
-export const RESET_PASSWORD_REQUEST: 'RESET_PASSWORD_REQUEST' = 'RESET_PASSWORD_REQUEST'
-export const RESET_PASSWORD_SUCCESS: 'RESET_PASSWORD_SUCCESS' = 'RESET_PASSWORD_SUCCESS'
-export const RESET_PASSWORD_FAILED: 'RESET_PASSWORD_FAILED' = 'RESET_PASSWORD_FAILED'
-
-export const RESET_PASSWORD_CODE_REQUEST: 'RESET_PASSWORD_CODE_REQUEST' = 'RESET_PASSWORD_CODE_REQUEST'
-export const RESET_PASSWORD_CODE_SUCCESS: 'RESET_PASSWORD_CODE_SUCCESS' = 'RESET_PASSWORD_CODE_SUCCESS'
-export const RESET_PASSWORD_CODE_FAILED: 'RESET_PASSWORD_CODE_FAILED' = 'RESET_PASSWORD_CODE_FAILED'
-
-export const REFRESH_TOKEN_REQUEST: 'REFRESH_TOKEN_REQUEST' = 'REFRESH_TOKEN_REQUEST'
-export const REFRESH_TOKEN_SUCCESS: 'REFRESH_TOKEN_SUCCESS' = 'REFRESH_TOKEN_SUCCESS'
-export const REFRESH_TOKEN_FAILED: 'REFRESH_TOKEN_FAILED' = 'REFRESH_TOKEN_FAILED'
-
+export interface ISetName {
+  readonly type: typeof SET_NAME;
+  readonly payload: string
+}
+export interface ISetEmail {
+  readonly type: typeof SET_EMAIL;
+  readonly payload: string;
+}
+export interface ISetLogin {
+  readonly type: typeof SET_LOGIN;
+  readonly payload: string;
+}
+export interface ISetPassword {
+  readonly type: typeof SET_PASSWORD;
+  readonly payload: string;
+}
+export interface ISetRestoreEmail {
+  readonly type: typeof SET_RESTORE_EMAIL;
+  readonly email: string;
+}
 export interface IRegisterRequest {
-  readonly type: typeof REGISTER_REQUEST
+  readonly type: typeof REGISTER_REQUEST;
 }
-
-export interface IRegisterSuccess{
-  readonly type: typeof REGISTER_SUCCESS
-  email: string
-  name: string
+export interface IRegisterSuccess {
+  readonly type: typeof REGISTER_SUCCESS;
 }
-
 export interface IRegisterFailed {
-  readonly type: typeof REGISTER_FAILED
+  readonly type: typeof REGISTER_FAILED;
 }
-
 export interface ILoginRequest {
-  readonly type: typeof LOGIN_REQUEST
+  readonly type: typeof LOGIN_REQUEST;
 }
-
-export interface ILoginSuccess{
-  readonly type: typeof LOGIN_SUCCESS
-  email: string
-  name: string
+export interface ILoginSuccess {
+  readonly type: typeof LOGIN_SUCCESS;
+  readonly user: TRegisterUserData;
 }
-
 export interface ILoginFailed {
-  readonly type: typeof LOGIN_FAILED
+  readonly type: typeof LOGIN_FAILED;
 }
-
-export interface ILogoutRequest {
-  readonly type: typeof LOGOUT_REQUEST
-}
-
-export interface ILogoutSuccess{
-  readonly type: typeof LOGOUT_SUCCESS
-}
-
-export interface ILogoutFailed {
-  readonly type: typeof LOGOUT_FAILED
-}
-
 export interface IGetUserRequest {
-  readonly type: typeof GET_USER_REQUEST
+  readonly type: typeof GET_USER_REQUEST;
 }
-
-export interface IGetUserSuccess{
-  readonly type: typeof GET_USER_SUCCESS
-  email: string
-  name: string
+export interface IGetUserSuccess {
+  readonly type: typeof GET_USER_SUCCESS;
+  readonly user: TRegisterUserData;
 }
-
 export interface IGetUserFailed {
-  readonly type: typeof GET_USER_FAILED
+  readonly type: typeof GET_USER_FAILED;
 }
-
-export interface IPatchUserRequest {
-  readonly type: typeof PATCH_USER_REQUEST
+export interface ICancelGetUserData {
+  readonly type: typeof CANCEL_GET_USER_DATA;
 }
-
-export interface IPatchUserSuccess{
-  readonly type: typeof PATCH_USER_SUCCESS
-  email: string
-  name: string
-}
-
-export interface IPatchUserFailed {
-  readonly type: typeof PATCH_USER_FAILED
-}
-
 export interface IResetPasswordRequest {
-  readonly type: typeof RESET_PASSWORD_REQUEST
+  readonly type: typeof RESET_PASSWORD_REQUEST;
 }
-
-export interface IResetPasswordSuccess{
-  readonly type: typeof RESET_PASSWORD_SUCCESS
+export interface IResetPasswordSuccess {
+  readonly type: typeof RESET_PASSWORD_SUCCESS;
+  readonly message: string;
 }
-
 export interface IResetPasswordFailed {
-  readonly type: typeof RESET_PASSWORD_FAILED
+  readonly type: typeof RESET_PASSWORD_FAILED;
 }
-
 export interface IResetPasswordCodeRequest {
-  readonly type: typeof RESET_PASSWORD_CODE_REQUEST
+  readonly type: typeof RESET_PASSWORD_CODE_REQUEST;
 }
-
-export interface IResetPasswordCodeSuccess{
-  readonly type: typeof RESET_PASSWORD_CODE_SUCCESS
+export interface IResetPasswordCodeSuccess {
+  readonly type: typeof RESET_PASSWORD_CODE_SUCCESS;
 }
-
 export interface IResetPasswordCodeFailed {
-  readonly type: typeof RESET_PASSWORD_CODE_FAILED
+  readonly type: typeof RESET_PASSWORD_CODE_FAILED;
 }
-
+export interface ISetNewPassword {
+  readonly type: typeof SET_NEW_PASSWORD;
+  readonly payload: string;
+}
+export interface ISetRestoreCode {
+  readonly type: typeof SET_RESTORE_CODE;
+  readonly payload: string;
+}
 export interface IRefreshTokenRequest {
-  readonly type: typeof REFRESH_TOKEN_REQUEST
+  readonly type: typeof REFRESH_TOKEN_REQUEST;
 }
-
-export interface IRefreshTokenSuccess{
-  readonly type: typeof REFRESH_TOKEN_SUCCESS
+export interface IRefreshTokenSuccess {
+  readonly type: typeof REFRESH_TOKEN_SUCCESS;
 }
-
 export interface IRefreshTokenFailed {
-  readonly type: typeof REFRESH_TOKEN_FAILED
+  readonly type: typeof REFRESH_TOKEN_FAILED;
+}
+export interface ILogoutRequest {
+  readonly type: typeof LOGOUT_REQUEST;
+}
+export interface ILogoutSuccess {
+  readonly type: typeof LOGOUT_SUCCESS;
+  readonly message: string;
+}
+export interface ILogoutFailed {
+  readonly type: typeof LOGOUT_FAILED;
+}
+export interface IDefault {
+  readonly type: '';
 }
 
 export type TUserActions = 
+  | ISetName
+  | ISetEmail
+  | ISetLogin
+  | ISetPassword
+  | ISetRestoreEmail
   | IRegisterRequest
   | IRegisterSuccess
   | IRegisterFailed
   | ILoginRequest
   | ILoginSuccess
   | ILoginFailed
-  | ILogoutRequest
-  | ILogoutSuccess
-  | ILogoutFailed
   | IGetUserRequest
   | IGetUserSuccess
   | IGetUserFailed
-  | IPatchUserRequest
-  | IPatchUserSuccess
-  | IPatchUserFailed
+  | ICancelGetUserData 
   | IResetPasswordRequest
   | IResetPasswordSuccess
   | IResetPasswordFailed
   | IResetPasswordCodeRequest
   | IResetPasswordCodeSuccess
   | IResetPasswordCodeFailed
+  | ISetNewPassword
+  | ISetRestoreCode 
   | IRefreshTokenRequest
   | IRefreshTokenSuccess
-  | IRefreshTokenFailed;
-
-  export const postResetPassword = async(email: string) => {
-    return await fetch(`${baseUrl}/password-reset`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email: email
-      })
-    }).then(_checkResponse)
-  }
-  
-  export const postResetPasswordCode = async(password: string, code: string) => {
-    return await fetch(`${baseUrl}/password-reset/reset`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        password: password,
-        token: code
-      })
-    }).then(_checkResponse)
-  }
-  
-  export const postCreateUser = async (email: string, password: string, name: string) => {
-    return await fetch(`${baseUrl}/auth/register`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-        name: name
-      })
-    }).then(_checkResponse)
-  }
-
-  export const postUpdateUser = async (name: string, email: string, accessToken: string) => {
-    return await fetch(`${baseUrl}/auth/user`, {
-      method: "PATCH",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`
-      },
-      body: JSON.stringify({
-        user: {
-          name: name,
-          email: email
-        },
-      }),
-    }).then(_checkResponse)
-  }
-
-  const postLogout = async (refreshToken: string) => {
-    return await fetch(`${baseUrl}/auth/logout`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ token: refreshToken})
-    }).then(_checkResponse)
-  }
-
-  const postGetUser = async (accessToken: string) => {
-    return await fetch(`${baseUrl}/auth/user`,{
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`
-      },
-    }).then(_checkResponse);
-  }
-
-  const postRefreshToken = async (refreshToken: string) => {
-    return await fetch(`${baseUrl}/auth/token`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token: refreshToken }),
-    }).then(_checkResponse);
-  }
-
-  const postLoginData = async (email: string, password: string) => {
-    return await fetch(`${baseUrl}/auth/login`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: email, password: password })
-    }).then(_checkResponse)
-  }
-
-  export const resetPassword: AppThunk =({ email }) =>(dispatch: AppDispatch) => {
-    dispatch({
-      type: RESET_PASSWORD_REQUEST,
-    })
-    postResetPassword(email).then((res) => {
-      if (res && res.success) {
-        dispatch({
-          type: RESET_PASSWORD_SUCCESS,
-        })
-      } else {
-        dispatch({
-          type: RESET_PASSWORD_FAILED,
-        })
-      }
-    }).catch((error) => console.log(`Error: ${error}`))
-  }
-
-  export const resetPasswordCode: AppThunk = ({password, code}) => (dispatch: AppDispatch) => {
-    dispatch({
-      type: RESET_PASSWORD_CODE_REQUEST
-    })
-    postResetPasswordCode(password, code).then((res) => {
-      if (res && res.success) {
-        dispatch({
-          type:RESET_PASSWORD_CODE_SUCCESS
-        })
-      } else {
-        dispatch({
-          type: RESET_PASSWORD_CODE_FAILED
-        })
-      }
-    }).catch((error) => console.log(`Error: ${error}`))
-  }
-
-  export const createUser: AppThunk = ({email, password, name}) => (dispatch: AppDispatch) => {
-    dispatch({
-      type: REGISTER_REQUEST
-    })
-    postCreateUser(email, password, name).then((res) => {
-      if (res && res.success) {
-        dispatch({
-          type: REGISTER_SUCCESS,
-          email: res.user.email,
-          name: res.user.name, // тут не понятно name или username
-          loggedIn: true
-        })
-        
-        let accessToken
-
-        if (res.accessToken.indexOf("Bearer") === 0) {
-          accessToken = res.accessToken.split("Bearer ")[1]
-        }
-
-        let refreshToken = res.refreshToken
-        if (accessToken && refreshToken) {
-          setCookie("accessToken", accessToken, { expires: 300 })
-          setCookie("refreshToken", refreshToken)
-        }
-      } else {
-        dispatch({
-          type: REGISTER_FAILED
-        })
-      }
-    }).catch((error) => console.log(`Error: ${error}`))
-  }
-
-  export const updateUser: AppThunk = ({ name, email, accessToken }) => (dispatch: AppDispatch) => {
-    dispatch({
-      type: PATCH_USER_REQUEST
-    })
-    postUpdateUser(name, email, accessToken).then((res) => {
-      if(res && res.success) {
-        dispatch({
-          type: PATCH_USER_SUCCESS,
-          name: res.user.name,
-          email: res.user.email
-        })
-      } else {
-        dispatch({
-          type: PATCH_USER_FAILED
-        })
-      }
-    }).catch((error) => console.log(`Error: ${error}`))
-  }
-
-  export const logout: AppThunk = (refreshToken) => (dispatch: AppDispatch) => {
-    dispatch({
-      type: LOGOUT_REQUEST
-    })
-    postLogout(refreshToken).then((res) => {
-      if(res && res.success) {
-        dispatch({
-          type: LOGOUT_SUCCESS
-        })
-      } else {
-        dispatch({
-          type: LOGOUT_FAILED
-        })
-      }
-    }).catch((error) => console.log(`Error: ${error}`))
-  }
-
-  export const getUser: AppThunk = (accesToken) => (dispatch: AppDispatch) => {
-    dispatch({
-      type: GET_USER_REQUEST
-    })
-    postGetUser(accesToken).then((res) => {
-      if(res && res.success) {
-        dispatch({
-          type: GET_USER_SUCCESS,
-          name: res.user.name,
-          email: res.user.email
-        })
-      } else {
-        dispatch({
-          type: GET_USER_FAILED
-        })
-      }
-    }).catch((error) => console.log(`Error: ${error}`))
-  } 
-
-  export function getCookie(name: string) {
-    const matches = document.cookie.match(
-      new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)')
-    );
-    return matches ? decodeURIComponent(matches[1]) : undefined;
-  }
-
-  export const refreshAccessToken: AppThunk = (refreshToken) => (dispatch: AppDispatch) => {
-    dispatch({
-      type: REFRESH_TOKEN_REQUEST
-    })
-    postRefreshToken(refreshToken).then((res) => {
-      if (res && res.success) {
-        dispatch({
-          type: REFRESH_TOKEN_SUCCESS
-        })
-        let accessToken 
-        console.log('AccessToken 2:', accessToken)
-        if (res.accessToken.indexOf('Bearer') === 0) {
-          accessToken = res.accessToken.split('Bearer ')[1]
-          console.log('AccessToken 2:', accessToken)
-
-        }
-        let refreshToken = res.refreshToken
-        console.log('refreshAccessToken 1:', refreshToken)
-        if (accessToken && refreshToken) {
-          console.log('refreshAccessToken 2:', refreshToken)
-
-          setCookie('accessToken', accessToken, { expires: 1200 })
-          setCookie('refreshToken', refreshToken)
-        }
-        // accessToken = getCookie('accessToken')
-        // if (accessToken) {
-        //   getUser(accessToken)
-        // }
-      } else {
-        dispatch({
-          type: REFRESH_TOKEN_FAILED
-        })
-      }
-    }).catch((error) => console.log(`Error: ${error}`))
-  }
-
-  export const login: AppThunk = ({ email, password }) => (dispatch: AppDispatch) => {
-    dispatch({
-      type: LOGIN_REQUEST
-    })
-    postLoginData(email, password).then((res) => {
-      if (res && res.success) {
-        dispatch({
-          type: LOGIN_SUCCESS,
-          email: res.user.email,
-          name: res.user.name
-        })
-        let accessToken
-        if (res.accessToken.indexOf("Bearer") === 0) {
-          accessToken = res.accessToken.split("Bearer ")[1];
-        }
-
-        let refreshToken = res.refreshToken;
-        if (accessToken && refreshToken) {
-          setCookie("accessToken", accessToken, { expires: 1200 });
-          setCookie("refreshToken", refreshToken);
-        }
-      } else {
-        dispatch({
-          type: LOGIN_FAILED
-        })
-      }
-    }).catch((error) => console.log(`Error: ${error}`))
-  }
-
-
-  ////////////////////////////////////////////////
-
-  export const dispatchGetUserRequest = (
-    accessToken: string,
-    dispatch: AppDispatch
-  ) => {
-    dispatch({
-      type: LOGIN_REQUEST
-    });
-    getUserRequest(accessToken)
-      .then((res) => {
-        dispatch({
-          type: LOGIN_SUCCESS,
-          email: res.user.email,
-          name: res.user.name
-        });
-        // dispatch(setUser(res.user));
-      })
-      .catch((error: any) => console.log(`Error: ${error}`))
-  };
-
-
-  // export const submitServerRequest = (): ISubmitServerRequest => ({
-  //   type: SUBMIT_SERVER_REQUEST,
-  // });
-
-  export const getUserRequest = async (accessToken: string) => {
-    const res = await fetch(`${baseUrl}/auth/user`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + accessToken,
-      },
-    });
-    return _checkResponse(res);
-  };
-
-  // export const submitGetUserSuccess = (): ISubmitGetUserSuccess => ({
-//   type: SUBMIT_GET_USER_SUCCESS,
-// });
-
-// export const setUser = (user: TUser): ISetUser => ({
-//   type: SET_USER,
-//   user,
-// });
+  | IRefreshTokenFailed
+  | ILogoutRequest
+  | ILogoutSuccess
+  | ILogoutFailed
+  | IDefault;

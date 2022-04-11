@@ -1,9 +1,9 @@
-import React, {FC} from "react"
+import React, {FC, SyntheticEvent} from "react"
 import AuthStyles from './auth-form.module.css'
 
 type TAuthForm = {
   title?: string
-  onSubmit: () => void
+  onSubmit: () => void | SyntheticEvent
 }
 
 export const AuthForm: FC<TAuthForm> = ({children, onSubmit, title}) => {

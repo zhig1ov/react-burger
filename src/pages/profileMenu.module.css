@@ -25,3 +25,8 @@
 .text {
   align-self: flex-start;
 }
+
+.container {
+  display: flex;
+  padding-top: 120px;
+}

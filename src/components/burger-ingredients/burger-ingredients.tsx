@@ -3,7 +3,7 @@ import IngredientsItem from '../ingredients-item/ingredients-item'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import IngredientsStyle from './burger-ingredients.module.css'
 import { useDispatchHook } from '../../services/hooks/hooks'
-import { ADD_CURRENT_INGREDIENT, REMOVE_CURRENT_INGREDIENT } from '../../services/actions'
+import { ADD_CURRENT_INGREDIENT, REMOVE_CURRENT_INGREDIENT } from '../../services/action-constants/burger'
 import Modal from '../modal/modal'
 import IngredientDeatils from '../ingredient-details/ingredient-details'
 import { useSelectorHook } from "../../services/hooks/hooks"
