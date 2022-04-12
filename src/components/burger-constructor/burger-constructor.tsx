@@ -12,8 +12,9 @@ import BurgerConstructorElement from '../burgerConstructorElement/burger-constru
 import { makeOrder } from '../../services/thunks/burger'
 import { useSelectorHook } from "../../services/hooks/hooks"
 import { TIngredients } from '../../utils/types'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
+type TAccessToken = Array<string> | null
 
 const BurgerConstructor = () => {
   const [ totalPrice, setTotalPrice ] = useState<number>(0)
@@ -21,9 +22,9 @@ const BurgerConstructor = () => {
   const constructorElements = useSelectorHook(state => state.burger.constructorElements)
   const orderNumber = useSelectorHook(state => state.burger.orderNumber)
   const bun = useSelectorHook(state => state.burger.bun)
-  const { user } = useSelectorHook((store) => store.user)
+  const { user:{name} } = useSelectorHook((store) => store.user)
   const history = useHistory()
-
+  const location = useLocation()
 
   useEffect(() => {
     if(bun) {
@@ -48,9 +49,15 @@ const BurgerConstructor = () => {
 
 
     const handleOpen = () => {
-      if (!user) {
-        history.replace('/login')
 
+      const accessToken: TAccessToken = document.cookie.match(/(accessToken=)(.+)/);
+      
+      if(!accessToken){
+          history.replace({
+              pathname: '/login',
+              state: { background: location}
+          })
+          history.push('/login')
       } else {
         dispatch(makeOrder(elementsId))
         dispatch({
