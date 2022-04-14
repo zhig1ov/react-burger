@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 120px;
+}
+
+.listContainer {
+  display: flex;
+  padding: 0;
+  list-style-type: none;
+  gap: 20px;
+  margin-top: 0px;
+  text-align: center;
+}
+
+.image {
+  width: 480px;
+  height: 240px;
+}
+
+.header {
+  align-self: flex-start;
+}

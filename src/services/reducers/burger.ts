@@ -13,8 +13,9 @@ import {
   MAKE_ORDER_SUCCESS,
   MAKE_ORDER_FAILED,
   CLEAR_ORDER_MODAL,
-  TActions
-} from "../actions/index";
+
+} from "../action-constants/burger"
+import { TActions } from "../actions/index"
 
 import { TIngredients } from '../../utils/types'
 
@@ -56,7 +57,6 @@ export const burgerReducer = (state = initialState, action: TActions): TInitialS
       return {
         ...state,
         constructorElements: [...state.constructorElements, action.item]
-
       }
     }
     case REMOVE_INGREDIENT: {

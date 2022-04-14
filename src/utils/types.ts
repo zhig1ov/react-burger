@@ -13,3 +13,19 @@ export type TIngredients = {
   __v: number,
   uuid?: number
 }
+
+export type TLocationTemplate = {
+  modalViewLocation?: any;
+  from: {
+    pathname: string;
+  };
+}
+
+export type TRegisterUserData = {
+  name: string;
+  email: string;
+}
+
+export type TDict<T> = {
+  [name: string]: T;
+};
