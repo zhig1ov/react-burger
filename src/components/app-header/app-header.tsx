@@ -15,7 +15,7 @@ const AppHeader = () => {
           <BurgerIcon type="primary" />
           <p>Конструктор</p>
         </NavLink>
-        <NavLink to={'./orders'} exact={true} className={`${headerStyle.item} text text_type_main-default text_color_inactive pl-2 `}>
+        <NavLink to={'../feed'} exact={true} className={`${headerStyle.item} text text_type_main-default text_color_inactive pl-2 `}>
           <ListIcon type="primary" />
           <p>Лента заказов</p>
         </NavLink>

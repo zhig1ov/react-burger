@@ -4,7 +4,7 @@ import appStyle from './app.module.css'
 import { useDispatchHook } from '../../services/hooks/hooks'
 import { getIngredients } from '../../services/thunks/burger'
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom'
-import { ForgotPasswordPage, LoginPage, RegisterPage, ResetPasswordPage, HomePage, ProfilePage, IngredientDetailsPage, NotFoundPage } from '../../pages'
+import { ForgotPasswordPage, LoginPage, RegisterPage, ResetPasswordPage, HomePage, ProfilePage, IngredientDetailsPage, NotFoundPage, FeedPage, OrderPage } from '../../pages'
 import { ProtectedRoute } from '../protected-route'
 import { ProtectedUnauthorizedRouteWithReset } from '../protectedUnauthorizedRouteWithReset'
 
@@ -30,7 +30,11 @@ const App = () => {
           <Route path='/register' exact render={() => <RegisterPage />} />
           <Route path='/forgot-password' exact render={() => <ForgotPasswordPage />} />
           <ProtectedUnauthorizedRouteWithReset path='/reset-password'  exact children={ <ResetPasswordPage />} />
-          <Route path='/orders' exact render={() => <div>orders</div>} />
+          <Route path='/feed' exact render={() => <FeedPage />} />
+          <Route path='/feed/:id' exact render={() => <OrderPage />} ></Route>
+          <ProtectedRoute path='/profile/orders/:id' exact >
+            <OrderPage />
+          </ProtectedRoute>
           <ProtectedRoute path="/profile">
             <ProfilePage />
           </ProtectedRoute>
