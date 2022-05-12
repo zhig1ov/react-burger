@@ -1,5 +1,3 @@
-<h1 align="center"><a  href="https://stellarburgers.vercel.app/" target="_blank"><img src="./readme_src/stellar-burger_header.jpg" width="100%" alt="шапка"></a></h1>
-
 ## Краткое описание:
 
 <p align="Left"> "Stellar Burgers" - одностраничное приложение, позволяющее собрать и заказать свой уникальный межгалактический бургер</p>
@@ -80,8 +78,6 @@
 ## Ссылки:
 
 [Макет](<https://www.figma.com/file/Z8DHldjVbvhQXtrkmJR8CU/React-%2F-Проектные-задачи-(3-месяца)?node-id=0%3A1>)
-
-- [Ссылка на деплой](https://stellarburgers.vercel.app/)
 
 - [По вопросам доработки сайта](https://t.me/t.zlv)
 
