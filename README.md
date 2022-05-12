@@ -1,46 +1,58 @@
-# Getting Started with Create React App
+шапка
+Краткое описание:
+"Stellar Burgers" - одностраничное приложение, позволяющее собрать и заказать свой уникальный межгалактический бургер
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Проект сверстан для настольных компьютеров (разрешение 1280x720 и выше, статическая верстка).
+Открыть в браузере
 
-## Available Scripts
+Функционал:
+с помощью перетаскивания соберите свой межгалактический бургер
+список ингредиентов приходит с публичного API
+регистрация/авторизация пользователя, восстановление пароля
+Хранение токенов в cookie
+Защищенный роутинг
+Лента заказов (WebSocket)
 
-In the project directory, you can run:
+Технологии, использованные при создании:
+React.js (CRA)
+TypeScript
+Redux (Redux-toolkit, thunk)
+React DND
+React Router
+Работа с публичным API
+JWT Token
+WebSocket
+Flexbox
+Grid Layout
+CSS - animation
+Семантическая верстка
+Использована библиотека UI-компонентов Яндекс.Практикум.Реакт
+Языки:
+HTML
+CSS
+TypeScript
+JSX
+Внешние компоненты
+Для работы с проектом вам понадобятся git, NodeJS
 
-### `npm start`
+Как установить git.
+Как установить NodeJS.
+Локальная установка:
+В командной строке перейдите в папку, где будет развернут проект. После чего скопируйте его с GitHub:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+`$ git clone git@github.com:zhig1ov/react-burger.git`
+Далее переходим в папку с проектом и устанавливаем компоненты:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+`$ npm install`
+Далее можно запускать проект на локальном сервере:
 
-### `npm test`
+`$ npm start`
+Деплой проекта:
+Устанавливаем пакет для выкладывания проекта на gh-pages:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+`$ npm install gh-pages --save-dev`
+Деплой:
 
-### `npm run build`
+`$ npm run deploy`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Проектная работа: "Stellar Burgers". Создана в рамках учебы в Яндекс.Практикум на курсе "Веб-разработчик плюс".
