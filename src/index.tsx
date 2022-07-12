@@ -11,10 +11,18 @@ import { ThunkAction } from "redux-thunk"
 import { TActions } from './services/actions/index'
 import { BrowserRouter as Router} from 'react-router-dom'
 import { TUserActions } from './services/actions/user'
+import { routerMiddleware } from 'connected-react-router'
+import { socketMiddleware } from './services/middleware'
+import { wsActions } from './services/actions/ws'
+import { wsUrl } from './utils/constants'
+import { createBrowserHistory } from 'history'
 
+export const history = createBrowserHistory();
 const composeEnhancers = (window as any)['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] as typeof compose || compose
 
-const enhancer = composeEnhancers(applyMiddleware(thunk))
+const enhancer = composeEnhancers(
+  applyMiddleware(thunk, routerMiddleware(history), socketMiddleware(wsUrl, wsActions, false))
+);
 
 export const store = createStore(rootReducer, enhancer)
 

@@ -5,6 +5,7 @@ import { logoutUser } from '../services/thunks/user'
 import Preloader from '../components/preloader/preloader'
 import profileMenuStyles from './profileMenu.module.css'
 import { ProfileForm } from './profile-form'
+import { OrderProfile } from '../components/order-profile/order-profile';
 
 export const ProfilePage: FC = () => {
   const dispatch = useDispatchHook()
@@ -29,6 +30,9 @@ export const ProfilePage: FC = () => {
         <Route path={path} exact>
           <ProfileForm />
         </Route>
+        <Route path='/profile/orders' exact={true}>
+                        <OrderProfile />
+                    </Route>
       </Switch>
       </main>
     )

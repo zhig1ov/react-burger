@@ -1,5 +1,6 @@
 import { baseUrl } from "./constants";
 import { TDict } from './types';
+import { TOrder, TIngredients } from './types'
 
 type TFetchOptions = {
   method: string;
@@ -35,6 +36,13 @@ export function setCookie(name: string, value: string, props?: any) {
     }
   }
   document.cookie = updatedCookie;
+}
+
+export function getCookie(name: string) {
+  const matches = document.cookie.match(
+      new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)')
+  );
+  return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
 export const deleteCookie = (name: string) =>
@@ -78,3 +86,54 @@ export const fetchWithRefresh = async (url: string, options: TFetchOptions) => {
     }
   }
 }
+
+// Отсортировать заказ по статусу
+export const filterOrdersByStatus = (arr: Array<TOrder>) => {
+  return arr?.reduce((acc: { [name: string]: Array<TOrder> }, curr) => {
+      curr.status === 'done' ? acc['done'] = [...acc['done'], curr] : acc['pending'] = [...acc['pending'], curr]
+      return acc;
+  }, { done: [], pending: [] })
+}
+
+const getCardDate = (days: number) => (
+  days === 0 ? 'Сегодня'
+      : days === 1 ? 'Вчера'
+      : days > 1 ? `${days} дня(-ей) назад`
+      : 'Ooops, ошибочка вышла('
+);
+
+export const createCardDate = (date: string) => {
+  const dayCreated: Date = new Date(date);
+  const today: Date = new Date();
+  today.setHours(0, 0, 0, 0);
+  const diffTime: number = Math.ceil((today.getTime() - dayCreated.getTime()) / (60 * 60 * 24 * 1000));
+  const hours = dayCreated.getHours() > 9 ? dayCreated.getHours() : `0${dayCreated.getHours()}`
+  const min = dayCreated.getMinutes() > 9 ? dayCreated.getMinutes() : `0${dayCreated.getMinutes()}`
+
+  return `${getCardDate(diffTime)}, ${hours}:${min} i-GMT+${dayCreated.getTimezoneOffset() * (-1) / 60}`;
+};
+
+export const getPrice = (arr: Array<TIngredients>) => arr?.reduce((acc: number, curr: TIngredients) => acc += curr.price, 0)
+
+export const getBurgerIngredients = (arrIdBurgerIngredients: Array<string>, arrAllIngredients: Array<TIngredients>) => (
+  arrIdBurgerIngredients?.map((id: string) => (
+      arrAllIngredients.filter((item: TIngredients) => item._id === id))))?.flat()
+  type TGetBurgerIngredientsObjWithCountReduceAcc = {
+  item: { [name: string]: TIngredients }, count: { [name: string]: number }
+}
+
+export const getStatus = (status: string) => {
+  return status === 'done'
+      ? { text: 'Выполнен', textColor: 'green' }
+      : status === 'pending'
+      ? { text: 'Отменен', textColor: 'yellow' }
+      : { text: 'Готовится', textColor: 'white' };
+}
+
+export const getBurgerIngredientsObjWithCount = (arr: Array<TIngredients>) => arr?.reduce((acc: TGetBurgerIngredientsObjWithCountReduceAcc, curr: TIngredients) => {
+  const id = curr._id
+  acc.item[id] = curr;
+  acc.count[id] = (acc.count[id] || 0) + 1
+  return acc
+}
+  , { item: {}, count: {} })

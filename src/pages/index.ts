@@ -6,6 +6,8 @@ import { HomePage } from './homePage'
 import { ProfilePage } from './profile'
 import { IngredientDetailsPage } from './ingredient-details'
 import { NotFoundPage } from './404'
+import { FeedPage } from './feed'
+import { OrderPage } from './order'
 
 
-export { ForgotPasswordPage, LoginPage, RegisterPage, ResetPasswordPage, HomePage, ProfilePage, IngredientDetailsPage, NotFoundPage }
+export { ForgotPasswordPage, LoginPage, RegisterPage, ResetPasswordPage, HomePage, ProfilePage, IngredientDetailsPage, NotFoundPage, FeedPage, OrderPage }

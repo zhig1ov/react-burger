@@ -1,6 +1,6 @@
 import { baseUrl } from '../../utils/constants'
 import { AppDispatch, AppThunk } from "../../index"
-import { TIngredients } from '../../utils/types'
+import { TIngredients, TOrder } from '../../utils/types'
 import { ADD_INGREDIENT,
          REMOVE_INGREDIENT,
          ADD_BUN,
@@ -14,7 +14,13 @@ import { ADD_INGREDIENT,
          MAKE_ORDER_REQUEST,
          MAKE_ORDER_SUCCESS,
          MAKE_ORDER_FAILED,
-         CLEAR_ORDER_MODAL } from '../action-constants/burger'
+         CLEAR_ORDER_MODAL,
+         GET_ORDER_REQUEST,
+         GET_ORDER_SUCCESS, 
+         GET_ORDER_FAILED,
+         GET_USER_ORDER_REQUEST, 
+         GET_USER_ORDER_SUCCESS, 
+         GET_USER_ORDER_FAILED, } from '../action-constants/burger'
 
 
 export interface IAddIngredient {
@@ -69,7 +75,7 @@ export interface IMakeOrderAction {
 
 export interface IMakeOrderSuccessAction {
   readonly type: typeof MAKE_ORDER_SUCCESS;
-  currentOrder: TIngredients[] | null;
+  currentOrder: TOrder | null;
   orderNumber: number | null;
 }
 
@@ -144,6 +150,35 @@ export const makeOrderFailed = (): IMakeOrderFailedAction => ({
   type: MAKE_ORDER_FAILED
 })
 
+// Get Order
+export interface IGetOrderRequestAction {
+  readonly type: typeof GET_ORDER_REQUEST;
+}
+
+export interface IGetOrderSuccessAction {
+  readonly type: typeof GET_ORDER_SUCCESS;
+  currentOrder: TOrder | null;
+  orderNumber: number | null;
+}
+
+export interface IGetOrderFailedAction {
+  readonly type: typeof GET_ORDER_FAILED;
+}
+
+// Get User Order
+export interface IGetUserOrderRequestAction {
+  readonly type: typeof GET_USER_ORDER_REQUEST;
+}
+
+export interface IGetUserOrderSuccessAction {
+  readonly type: typeof GET_USER_ORDER_SUCCESS;
+  readonly order: TOrder;
+}
+
+export interface IGetUserOrderFailedAction {
+  readonly type: typeof GET_USER_ORDER_FAILED;
+}
+
 
 
 export type TActions = 
@@ -164,5 +199,11 @@ export type TActions =
   | IMakeOrderSuccessAction
   | IMakeOrderFailedAction
   | IClearOrderModal
+  | IGetOrderRequestAction
+  | IGetOrderSuccessAction
+  | IGetOrderFailedAction
+  | IGetUserOrderRequestAction
+  | IGetUserOrderSuccessAction
+  | IGetUserOrderFailedAction
 
   

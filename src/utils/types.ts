@@ -1,3 +1,5 @@
+import { wsActions } from '../services/actions/ws'
+
 export type TIngredients = {
   _id: string,
   name:string,
@@ -29,3 +31,21 @@ export type TRegisterUserData = {
 export type TDict<T> = {
   [name: string]: T;
 };
+
+export type TOrder = {
+	createdAt: string;
+	ingredients: Array<string>;
+	name: string;
+	number: number;
+	status: string;
+	updatedAt: string;
+	_id: string;
+}
+
+export type TOrders = {
+	orders: Array<TOrder>;
+	total: number;
+	totalToday: number;
+}
+
+export type TWSAction = typeof wsActions 

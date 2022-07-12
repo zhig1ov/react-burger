@@ -13,11 +13,12 @@ import {
   MAKE_ORDER_SUCCESS,
   MAKE_ORDER_FAILED,
   CLEAR_ORDER_MODAL,
+  GET_USER_ORDER_REQUEST, GET_USER_ORDER_SUCCESS, GET_USER_ORDER_FAILED
 
 } from "../action-constants/burger"
 import { TActions } from "../actions/index"
 
-import { TIngredients } from '../../utils/types'
+import { TIngredients, TOrder } from '../../utils/types'
 
 type TInitialState = {
   constructorElements: TIngredients[],
@@ -29,10 +30,13 @@ type TInitialState = {
 
   currentIngredient: TIngredients | null
 
-  currentOrder: TIngredients[] | null;
+  currentOrder: TOrder | null;
   orderNumber: number | null;
   makeOrderRequest: boolean,
   makeOrderFailed: boolean,
+  orderLoaded: boolean,
+  orderRequest: boolean;
+  orderFailed: boolean;
 }
 
 const initialState: TInitialState = {
@@ -49,6 +53,9 @@ const initialState: TInitialState = {
   orderNumber: null,
   makeOrderRequest: false,
   makeOrderFailed: false,
+  orderLoaded: false,
+  orderRequest: false,
+  orderFailed: false
 }
 
 export const burgerReducer = (state = initialState, action: TActions): TInitialState => {
@@ -128,6 +135,7 @@ export const burgerReducer = (state = initialState, action: TActions): TInitialS
         ...state,
         makeOrderRequest: false,
         makeOrderFailed: false,
+        orderLoaded: true,
         currentOrder: action.currentOrder,
         orderNumber: action.orderNumber
       }
@@ -139,6 +147,36 @@ export const burgerReducer = (state = initialState, action: TActions): TInitialS
         makeOrderFailed: true
       }
     }
+            // Запрос пользовательского заказа
+            case GET_USER_ORDER_REQUEST: {
+              return {
+                  ...state,
+                  orderRequest: true,
+                  orderFailed: false,
+                  orderLoaded: false
+              };
+          }
+  
+          // Удачный запрос пользовательского заказа
+          case GET_USER_ORDER_SUCCESS: {
+              const data = action.order ? action.order : null
+              return {
+                  ...state,
+                  orderRequest: false,
+                  orderFailed: false,
+                  orderLoaded: true,
+                  currentOrder: data,
+              };
+          }
+  
+          // Ошибка запроса пользовательского заказа 
+          case GET_USER_ORDER_FAILED: {
+              return { 
+                  ...state,
+                  orderRequest: false,
+                  orderFailed: true,
+              };
+          }
     case CLEAR_ORDER_MODAL: {
       return {
         ...state,
