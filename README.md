@@ -1,10 +1,21 @@
+<h1 align="center"><a  href="https://react-burger-eight-iota.vercel.app/" target="_blank"><img src="./readme_src/stellar-burger_header.jpg" width="100%" alt="шапка"></a></h1>
+
 ## Краткое описание:
 
 <p align="Left"> "Stellar Burgers" - одностраничное приложение, позволяющее собрать и заказать свой уникальный межгалактический бургер</p>
 Проект сверстан для настольных компьютеров (разрешение 1280x720 и выше, статическая верстка).
 
+[Открыть в браузере](https://react-burger-eight-iota.vercel.app/)
+<br>
+
 Для полноценного тестирования необходимо зарегистрироваться или авторизоваться.
 <br>
+
+Тестовые данные для авторизации:
+<br>
+**e-mail:** stellarburgers@test.com 
+<br>
+**Пароль:** password
 
 ## Функционал:
 
@@ -79,6 +90,12 @@
 
 [Макет](<https://www.figma.com/file/Z8DHldjVbvhQXtrkmJR8CU/React-%2F-Проектные-задачи-(3-месяца)?node-id=0%3A1>)
 
+- [Ссылка на деплой](https://react-burger-eight-iota.vercel.app/)
+
 - [По вопросам доработки сайта](https://t.me/t.zlv)
+
+## Планы по доработке проекта:
+
+- Добавить историю заказов пользователя
 
 ## Проектная работа: "Stellar Burgers". Создана в рамках учебы в [Яндекс.Практикум](https://praktikum.yandex.ru/) на курсе ["Веб-разработчик плюс"](https://practicum.yandex.ru/web-plus/).
